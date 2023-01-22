@@ -1,5 +1,3 @@
-import copy
-
 def pp(l1, n, m):
     count = 1
 
