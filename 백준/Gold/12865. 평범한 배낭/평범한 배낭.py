@@ -1,4 +1,3 @@
-
 n, k = map(int, input().split())
 
 w, v = [], []
