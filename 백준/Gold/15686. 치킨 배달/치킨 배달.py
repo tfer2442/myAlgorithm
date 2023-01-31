@@ -19,24 +19,21 @@ for i in range(n):
 
 dist = [[0] * len(chicken) for i in range(len(home))]
 
-lh = len(home)
-lc = len(chicken)
-
-for i in range(lh):
-    for j in range(lc):
+for i in range(len(home)):
+    for j in range(len(chicken)):
         dist[i][j] = abs(home[i][0] - chicken[j][0]) + abs(home[i][1] - chicken[j][1])
 
-l1 = list(combinations(range(lc), m))
-ll1 = len(l1)
+l1 = list(combinations(range(len(chicken)), m))
 sum_list = []
 
-for i in range(ll1):
+for i in range(len(l1)):
     suma = 0
-    for j in range(lh):
-        mina = dist[j][l1[i][0]]
+
+    for j in range(len(home)):
+        min_list = []
         for l in l1[i]:
-            mina = min(mina, dist[j][l])
-        suma += mina
+            min_list.append(dist[j][l])
+        suma += min(min_list)
     sum_list.append(suma)
 
 print(min(sum_list))
