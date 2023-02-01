@@ -5,7 +5,7 @@ n = int(input())
 l1 = [int(input()) for _ in range(n)]
 l1.sort()
 
-c = len(l1) - 1
+c = n - 1
 b = c - 1
 a = b - 1
 
