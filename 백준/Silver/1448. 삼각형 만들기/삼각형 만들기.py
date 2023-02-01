@@ -2,9 +2,7 @@ import sys
 input = sys.stdin.readline
 
 n = int(input())
-l1 = []
-for i in range(n):
-    l1.append(int(input()))
+l1 = [int(input()) for _ in range(n)]
 l1.sort()
 
 c = len(l1) - 1
