@@ -9,7 +9,7 @@ c = n - 1
 b = c - 1
 a = b - 1
 
-while True:
+for _ in range(n):
     if l1[a] + l1[b] > l1[c]:
         print(l1[a]+l1[b]+l1[c])
         break
