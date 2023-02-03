@@ -18,7 +18,7 @@ for i in range(n):
         cnt += 1
     if l1[i] > 0:
         cnt -= 1
-        
+
     if l1[i] >= 0:
         iSum = iSum + l1[i]
     elif l1[i] < 0 and iSum < abs(l1[i]):
@@ -31,6 +31,6 @@ for i in range(n):
 if cnt == n:
     print(max(l1))
 elif cnt == -n:
-    print(sum(l1))
+    print(iSum)
 else:
     print(max(s))
