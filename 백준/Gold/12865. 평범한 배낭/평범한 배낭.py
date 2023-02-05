@@ -18,7 +18,7 @@ for i in range(1, n):
 
         if w[i] <= k and j == 0:
             l1[i][w[i]] = v[i]
-        if j + w[i] <= k and l1[i-1][j] != 0:
+        if j + w[i] <= k : # and l1[i-1][j] != 0
             l1[i][j+w[i]] = max(l1[i-1][j+w[i]], l1[i-1][j]+v[i])
 
 print(max(l1[n-1]))
