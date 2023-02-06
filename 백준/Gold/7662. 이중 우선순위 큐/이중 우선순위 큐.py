@@ -8,7 +8,7 @@ input = sys.stdin.readline
 
 t = int(input())
 
-for i in range(t):
+for _ in range(t):
     k = int(input())
     visited = [False] * k
 
@@ -21,11 +21,9 @@ for i in range(t):
         if tmp1 == 'I':
             heapq.heappush(minh, (tmp2, j))
             heapq.heappush(maxh, (-tmp2, j))
-        elif tmp1 == 'D':
-            if not minh or not maxh:
-                continue
+        else:
             if tmp2 == 1:
-                for k in range(len(maxh)):
+                for _ in range(len(maxh)):
                     if visited[maxh[0][1]]:
                         heapq.heappop(maxh)
                     else:
@@ -33,8 +31,8 @@ for i in range(t):
                         heapq.heappop(maxh)
                         break
 
-            elif tmp2 == -1:
-                for k in range(len(minh)):
+            else:
+                for _ in range(len(minh)):
                     if visited[minh[0][1]]:
                         heapq.heappop(minh)
                     else:
@@ -42,12 +40,12 @@ for i in range(t):
                         heapq.heappop(minh)
                         break
 
-    for a in range(len(minh)):
+    for a in minh:
         if visited[minh[0][1]]:
             heapq.heappop(minh)
         else:
             break
-    for a in range(len(maxh)):
+    for a in maxh:
         if visited[maxh[0][1]]:
             heapq.heappop(maxh)
         else:
