@@ -17,6 +17,8 @@ while True:
     for i in range(n):
         if l1[i] - mid >= 0:
             Tsum += l1[i] - mid
+        if Tsum > m:
+            break
 
     if Tsum < m:
         right = mid
