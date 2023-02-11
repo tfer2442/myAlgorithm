@@ -14,8 +14,6 @@ for i in range(1, n):
     l1 = list(map(int, input().split()))
     for j in range(n):
         heapq.heappush(l2, l1[j])
-
-    for j in range(n):
         heapq.heappop(l2)
 
 print(heapq.heappop(l2))
