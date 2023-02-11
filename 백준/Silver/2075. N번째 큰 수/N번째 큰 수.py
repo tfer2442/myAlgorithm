@@ -1,15 +1,14 @@
 import sys
+from heapq import heappush, heappushpop
 input = sys.stdin.readline
-import heapq
 
 n = int(input())
-l2 = []
-l1 = list(map(int, input().split()))
-for j in l1:
-    heapq.heappush(l2, j)
+l1 = []
+
+for j in list(map(int, input().split())):
+    heappush(l1, j)
 for i in range(1, n):
-    l1 = list(map(int, input().split()))
-    for j in l1:
-        if l2[0] < j:
-            heapq.heappushpop(l2, j)
-print(l2[0])
+    for j in list(map(int, input().split())):
+        if l1[0] < j:
+            heappushpop(l1, j)
+print(l1[0])
