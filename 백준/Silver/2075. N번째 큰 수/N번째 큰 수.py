@@ -12,8 +12,8 @@ for j in range(n):
 
 for i in range(1, n):
     l1 = list(map(int, input().split()))
-    for j in range(n):
-        if l2[0] < l1[j]:
-            heapq.heappushpop(l2, l1[j])
+    for j in l1:
+        if l2[0] < j:
+            heapq.heappushpop(l2, j)
 
 print(l2[0])
