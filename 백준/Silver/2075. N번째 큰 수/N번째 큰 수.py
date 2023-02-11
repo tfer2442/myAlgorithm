@@ -13,7 +13,6 @@ for j in range(n):
 for i in range(1, n):
     l1 = list(map(int, input().split()))
     for j in range(n):
-        heapq.heappush(l2, l1[j])
-        heapq.heappop(l2)
+        heapq.heappushpop(l2, l1[j])
 
 print(heapq.heappop(l2))
