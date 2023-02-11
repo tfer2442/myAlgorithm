@@ -15,4 +15,4 @@ for i in range(1, n):
     for j in range(n):
         heapq.heappushpop(l2, l1[j])
 
-print(heapq.heappop(l2))
+print(l2[0])
