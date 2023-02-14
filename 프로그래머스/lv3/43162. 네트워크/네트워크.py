@@ -8,24 +8,20 @@ def solution(n, computers):
                 l1[i].append(j)
     q = deque()
     visited = [False] * n
-    cnt = 0
-
+    answer = 0
+    
     for j in range(n):
         if visited[j]:
             continue
         q.append(j)
         visited[j] = True
-        cnt = cnt + 1
+        answer = answer+1
         while True:
             if not q:
                 break
             a = q.popleft()
-
             for i in l1[a]:
                 if not visited[i]:
                     q.append(i)
                     visited[i] = True
-
-
-    answer = cnt
     return answer
