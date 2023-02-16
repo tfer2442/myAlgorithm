@@ -4,7 +4,7 @@ input = sys.stdin.readline
 def dfs(cnt):
     for i in graph[cnt]:
         if not visited[i]:
-            visited[i] = True
+            visited[i] = 1
             dfs(i)
 
 
@@ -16,7 +16,7 @@ for i in range(eNum):
     a, b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
-visited = [False] * (n+1)
-
+visited = [0] * (n+1)
 dfs(1)
-print(visited.count(True) - 1)
+visited[1] = 1
+print(sum(visited) - 1)
