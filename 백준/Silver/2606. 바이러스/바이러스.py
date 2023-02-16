@@ -1,7 +1,5 @@
 import sys
-from collections import Counter
 input = sys.stdin.readline
-
 
 def dfs(cnt):
     for i in graph[cnt]:
@@ -19,5 +17,6 @@ for i in range(eNum):
     graph[a].append(b)
     graph[b].append(a)
 visited = [False] * (n+1)
+
 dfs(1)
-print(Counter(visited)[True] - 1)
+print(visited.count(True) - 1)
