@@ -28,9 +28,7 @@ while True:
         print(startN)
         break
 
-    if startR <= r < startR + 2**(n-1) and startC <= c < startC + 2**(n-1):  # 1사분면
-        pass
-    elif startR <= r < startR + 2**(n-1) and startC + 2**(n-1) <= c < startC + 2**n:  # 2사분면
+    if startR <= r < startR + 2**(n-1) and startC + 2**(n-1) <= c < startC + 2**n:  # 2사분면
         startC = startC + 2 ** (n - 1)
         startN = startN + (2**n * 2**n)//4
     elif startR+2**(n-1) <= r < startR + 2**n and startC <= c < startC + 2**(n-1):  # 3사분면
