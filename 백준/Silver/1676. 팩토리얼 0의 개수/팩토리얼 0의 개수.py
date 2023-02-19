@@ -18,4 +18,3 @@ else:
         else:
             break
     print(cnt)
-
