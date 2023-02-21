@@ -1,29 +1,19 @@
 import sys
-from collections import deque
 input = sys.stdin.readline
 
+
+def solution(n, k):
+    dp = [0] * 100001
+    for i in range(n):
+        dp[i] = n-i
+
+    for i in range(n+1, k+1):
+        if i % 2 != 0:
+            dp[i] = min(dp[i-1] + 1, dp[(i+1) // 2] + 2)
+        else:
+            dp[i] = min(dp[i-1] + 1, dp[i // 2] + 1)
+
+    return dp[k]
+
 n, k = map(int, input().split())
-
-l1 = deque()
-visited = [0]*100001
-l1.append(n)
-visited[n] = 1
-
-while True:
-    if visited[k]:
-        print(visited[k] - 1)
-        break
-    tmp = l1.popleft()
-
-    cal = []
-    if tmp-1 >= 0:
-        cal.append(tmp-1)
-    if tmp+1 <= 100000:
-        cal.append(tmp+1)
-    if tmp*2 <= 100000:
-        cal.append(tmp*2)
-
-    for i in cal:
-        if not visited[i]:
-            l1.append(i)
-            visited[i] = visited[tmp] + 1
+print(solution(n, k))
