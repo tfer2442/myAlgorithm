@@ -15,7 +15,7 @@ def bfs():
             tmp = l1.popleft()
 
             for i in [tmp * 2, tmp-1, tmp+1]:
-                if 0 <= i <= 200000 and not visited[i]:
+                if 0 <= i <= 100000 and not visited[i]:
                     l1.append(i)
                     if i != tmp * 2:
                         visited[i] = visited[tmp] + 1
@@ -26,7 +26,7 @@ def bfs():
 n, k = map(int, input().split())
 
 l1 = deque()
-visited = [0]*200001
+visited = [0]*100001
 l1.append(n)
 visited[n] = 1
 bfs()
