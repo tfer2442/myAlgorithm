@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 2340 KB, 시간: 0 ms
+메모리: 31256 KB, 시간: 60 ms
 
 ### 분류
 
-분할 정복(divide_and_conquer), 구현(implementation), 재귀(recursion)
+구현, 분할 정복, 재귀
 
 ### 문제 설명
 
