@@ -33,15 +33,6 @@ for i in range(n):
     for j in range(n):
         l1[i+1][j+1] = int(tmp[j])
 
-# for i in range(n+2):
-#     l1[0][i] = -1
-#     l1[i][0] = -1
-#     l1[n+1][i] = -1
-#     l1[i][n+1] = -1
-#     visited[0][i] = -1
-#     visited[i][0] = -1
-#     visited[n+1][i] = -1
-#     visited[i][n+1] = -1
 
 hl = []
 for i in range(1, n+1):
