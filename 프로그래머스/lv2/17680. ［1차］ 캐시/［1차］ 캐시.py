@@ -16,6 +16,4 @@ def solution(cacheSize, cities):
             l1.insert(0, cities[i])
             answer += 5
 
-        
-    
     return answer
