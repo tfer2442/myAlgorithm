@@ -9,10 +9,10 @@ def solution(s):
     l2 = [[0]*500 for _ in range(500)] 
     
     for i in range(len(l1)):
-        l2[i] = l1[i].split(',')
-    for i in range(len(l1)):
-        for j in range(len(l2[i])):
-            l2[i][j] = int(l2[i][j])
+        l2[i] = list(map(int, l1[i].split(',')))
+    #for i in range(len(l1)):
+     #   for j in range(len(l2[i])):
+       #     l2[i][j] = int(l2[i][j])
             
     for i in range(1, len(l1)+1):
         for j in l2:
