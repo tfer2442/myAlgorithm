@@ -9,10 +9,6 @@ def solution(m, musicinfos):
         h2, m2 = map(int, tmp[1].split(':')) 
         h1, m1 = map(int, tmp[0].split(':'))
         
-        if (h2 == 0) and (m2 == 0):
-            if h1 == 0:
-                h1 = 24
-            h2 = 24
         t = (h2 * 60 + m2) - (h1 * 60 + m1)
 
         if t < mlen:
