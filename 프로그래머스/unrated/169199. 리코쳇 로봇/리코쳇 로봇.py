@@ -15,11 +15,10 @@ def solution(board):
         if flag == 1: break
 
     q = []
-    q.append((sr, sc, 0))
+    q.append((sr, sc, 1))
     visited[sr][sc] = 1
     while True:
         if not q:
-            answer = -1
             break
 
         a, b, cnt = q.pop(0)
@@ -36,11 +35,11 @@ def solution(board):
                         tmpa, tmpb = c, d
                     else:
                         if board[tmpa][tmpb] == 'G':
-                            return cnt+1
+                            return cnt
                         break
                 else:
                     if board[tmpa][tmpb] == 'G':
-                        return cnt+1
+                        return cnt
                     break
             if (a != tmpa) or (b != tmpb):
                 if visited[tmpa][tmpb] == 1:
@@ -48,7 +47,7 @@ def solution(board):
                 visited[tmpa][tmpb] = 1
                 q.append((tmpa, tmpb, cnt + 1))
 
-    return answer
+    return -1
 
 
 print(solution([".D.R", "....", ".G..", "...D"]))
