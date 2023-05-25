@@ -23,7 +23,4 @@ def solution(user_id, banned_id):
             ansset.add(tuple(l1))
     answer = len(ansset)
                 
-                        
-            
-    
     return answer
