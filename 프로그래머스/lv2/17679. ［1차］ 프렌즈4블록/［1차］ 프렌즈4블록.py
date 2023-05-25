@@ -7,8 +7,7 @@ def solution(m, n, board):
         board[i] = board[i] + 'X'
     
     for i in range(m+1):
-        for j in range(n+1):
-            b1[i][j] = board[i][j]
+        b1[i] = list(board[i])
     while True:
         for i in range(m):
             for j in range(n):
@@ -23,7 +22,7 @@ def solution(m, n, board):
                 if 'a' <= b1[i][j] <= 'z':
                     cnt += 1
                     b1[i][j] = 'X'
-        for k in range(m):
+        for k in range(m-2):
             for i in range(m-2, -1, -1):
                 for j in range(n):
                     if b1[i+1][j] == 'X':
@@ -33,6 +32,5 @@ def solution(m, n, board):
         if cnt == 0:
             break
         answer += cnt
-            
-                
+                        
     return answer
