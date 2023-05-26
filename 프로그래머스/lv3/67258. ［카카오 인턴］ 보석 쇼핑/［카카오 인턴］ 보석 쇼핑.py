@@ -1,30 +1,30 @@
-from collections import deque, Counter
-
+from collections import deque
 def solution(gems):
     answer = []
-    
-    d1 = Counter(gems)
-    d2 = Counter()
-    gemslen = len(d1)
-    
-    d2[gems[0]] += 1
+    d1 = {}
+    gemslen = 0
+    s = set()
+
+    for i in gems:
+        if i in d1:
+            d1[i] += 1
+        else:
+            d1[i] = 1
+            gemslen += 1
+            
     left = 0
     right = 0
+    de = deque()
+    de.appendleft(1)
+    s1 = set(de)
+    print(s1)
+    #for i, j in enumerate(gems):
+    #    s.add(j)
+       # if len(s) == gemslen:
+      #      answer.append([left+1, right+1])
+      #      break
+        
+            
     
-    while True:
-        if len(d2) != gemslen:
-            right += 1
-            if right >= len(gems):
-                break
-            d2[gems[right]] += 1
-        elif len(d2) == gemslen:
-            answer.append([left+1, right+1])
-            d2[gems[left]] -= 1
-            if d2[gems[left]] == 0:
-                del d2[gems[left]]
-            left += 1
-            if left >= len(gems): 
-                break
-    answer.sort(key = lambda x : (x[1]-x[0]))
-
-    return answer[0]
+    
+    return answer
