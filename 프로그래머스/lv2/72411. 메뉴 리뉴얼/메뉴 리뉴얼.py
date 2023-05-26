@@ -6,7 +6,7 @@ def solution(orders, course):
     tmp = []
     
     for i in orders:
-        odlist.append(list(i))
+        odlist.append(list(sorted(i)))
     
     for i in course:
         d1 = dict()
@@ -15,7 +15,6 @@ def solution(orders, course):
             if len(j) < i: continue          
             for k in combinations(j, i):
                 k = list(k)
-                k.sort()
                 k = tuple(k)
                 if k in d1:
                     d1[k] += 1
