@@ -1,46 +1,24 @@
-import sys
-sys.setrecursionlimit(10 ** 7)
+from collections import deque
+
 def solution(stones, k):
-    #     answer = 0
-    #     l2 = []
-    #     for i in range(len(stones)-k+1):
-    #         l1 = []
-    #         for j in range(i, i+k):
+    answer = float('inf')
+    dq = deque()
+    max_values = []
 
-    #             heappush(l1, -stones[j])
-    #         heappush(l2, -heappop(l1))
-    #     answer = l2[0]
-    answer = 0
-    ans = []
-    l1 = sorted(stones)
+    for i in range(len(stones)):
+        # 슬라이딩 윈도우 크기를 유지하기 위해 dq에서 벗어난 인덱스 제거
+        if dq and dq[0] == i - k:
+            dq.popleft()
 
-    def f(m):
-        cnt = 0
-        for i in stones:
-            if i - m <= 0:
-                cnt += 1
-            else:
-                cnt = 0
-            if cnt == k:
-                ans.append(m)
-                return False
-        return True
-    
-    left = 0
-    right = len(stones)-1
-    while True:
-        if left > right:
-            break
-        mid = (left + right) // 2
-        flag = f(l1[mid])
-        if flag:
-            left = mid+1
-        else:
-            right = mid-1
-            
-    if ans:
-        answer = min(ans)
-    else:
-        answer = stones[0]
+        # 현재 원소보다 작은 값들은 dq에서 제거
+        while dq and stones[i] >= stones[dq[-1]]:
+            dq.pop()
 
+        dq.append(i)
+        
+        # 현재 슬라이딩 윈도우 내의 최댓값을 max_values에 저장
+        if i >= k - 1:
+            max_values.append(stones[dq[0]])
+
+    answer = min(max_values)
     return answer
