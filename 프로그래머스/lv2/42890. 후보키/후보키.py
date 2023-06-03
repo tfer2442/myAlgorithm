@@ -22,31 +22,12 @@ def solution(relation):
                     break
             if flag == 1:
                 continue
-                
-            if i == 1:                
-                 for j in range(row):
-                    l1.append(relation[j][cbtmp[0]])
-            elif i == 2:
-                for j in range(row):
-                    l1.append((relation[j][cbtmp[0]], relation[j][cbtmp[1]]))
-            elif i == 3:
-                for j in range(row):
-                    l1.append((relation[j][cbtmp[0]], relation[j][cbtmp[1]], relation[j][cbtmp[2]]))
-            elif i == 4:
-                for j in range(row):
-                    l1.append((relation[j][cbtmp[0]], relation[j][cbtmp[1]], relation[j][cbtmp[2]], relation[j][cbtmp[3]]))
-            elif i == 5:
-                for j in range(row):
-                    l1.append((relation[j][cbtmp[0]], relation[j][cbtmp[1]], relation[j][cbtmp[2]], relation[j][cbtmp[3]], relation[j][cbtmp[4]]))
-            elif i == 6:
-                for j in range(row):
-                    l1.append((relation[j][cbtmp[0]], relation[j][cbtmp[1]], relation[j][cbtmp[2]], relation[j][cbtmp[3]], relation[j][cbtmp[4]], relation[j][cbtmp[5]]))
-            elif i == 7:
-                for j in range(row):
-                    l1.append((relation[j][cbtmp[0]], relation[j][cbtmp[1]], relation[j][cbtmp[2]], relation[j][cbtmp[3]], relation[j][cbtmp[4]], relation[j][cbtmp[5]], relation[j][cbtmp[6]]))
-            elif i == 8:
-                for j in range(row):
-                    l1.append((relation[j][cbtmp[0]], relation[j][cbtmp[1]], relation[j][cbtmp[2]], relation[j][cbtmp[3]], relation[j][cbtmp[4]], relation[j][cbtmp[5]], relation[j][cbtmp[6]], relation[j][cbtmp[7]]))
+            
+            for j in relation:
+                s = ""
+                for k in cbtmp:
+                    s += j[k] + " "
+                l1.append(s)
             
             s1 = set(l1)
 
