@@ -1,5 +1,7 @@
 import sys
-sys.setrecursionlimit(10**7)
+from collections import deque
+
+sys.setrecursionlimit(10**6)
 input = sys.stdin.readline
 
 
@@ -15,6 +17,24 @@ def dfs(v, count1):
        gsum = gsum + count1
 
 
+def bfs(v):
+    global gsum
+
+    q = deque()
+    q.append(v)
+    visited[v] += 1
+
+    while q:
+        tmp = q.popleft()
+        flag = False
+        for i in g1[tmp]:
+            if visited[i] == 0:
+                q.append(i)
+                flag = True
+                visited[i] = visited[tmp] + 1
+        if not flag:
+            gsum += visited[tmp] - 1
+
 
 n = int(input())
 g1 = [[] for i in range(n+1)]
@@ -27,8 +47,9 @@ for i in range(n-1):
 global gsum
 gsum = 0
 
-visited = [False] * (n+1)
-dfs(1, 0)
+visited = [0] * (n+1)
+#dfs(1, 0)
+bfs(1)
 
 if gsum % 2 == 0:
     print("No")
