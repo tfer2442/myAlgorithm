@@ -7,11 +7,6 @@ def solution(progresses, speeds):
             progresses[i] = progresses[i] + speeds[i]
 
         if progresses[0] >= 100:
-            # if len(progresses) == 1:
-            #     progresses.pop(0)
-            #     speeds.pop(0)
-            #     answer.append(1)
-
             for j in range(len(progresses)):
                 if progresses[j] < 100:
                     for k in range(j):
