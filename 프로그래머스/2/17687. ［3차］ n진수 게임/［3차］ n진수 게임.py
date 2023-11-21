@@ -17,16 +17,13 @@ def solution(n, t, m, p):
     result = ''
     i = 0
     
-    while len(result) < (t*m+p):
+    while len(result) < (t*m-(m-p)):
         result += decimalToK(i, n)
         i += 1
     print(result)
 
     for i in range(t):
         answer += result[i*m + (p-1)]
-        
-        
-    print(answer)    
-        
+                
         
     return answer
