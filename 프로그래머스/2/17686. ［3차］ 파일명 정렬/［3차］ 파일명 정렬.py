@@ -33,9 +33,6 @@ def solution(files):
     splitedFile.sort(key = lambda x : (x[0], x[1]))
     
     for i in range(len(splitedFile)):
-        sortingIndex.append(splitedFile[i][3])
-    
-    for i in sortingIndex:
-        answer.append(files[i])
+        answer.append(files[splitedFile[i][3]])
     
     return answer
