@@ -22,6 +22,9 @@ def solution(m, n, board):
                 if isBombBlock(boardList, i, j):
                     bombIndexes.append((i,j))
         
+        if not bombIndexes:
+            break
+        
         for index in bombIndexes:
             boardList[index[0]][index[1]] = '!'
             boardList[index[0]+1][index[1]] = '!'
@@ -32,9 +35,8 @@ def solution(m, n, board):
             tmp = ''.join(boardList[i])
             tmp = tmp.replace('!', '')
             tmp = tmp.rjust(m, '!')
-            #tmp = " "*(m-len(tmp)) + tmp
             boardList[i] = list(tmp[:])
-    
+            
     
     for i in range(n):
         for j in range(m):
