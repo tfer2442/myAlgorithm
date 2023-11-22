@@ -7,19 +7,29 @@ def calBomb(n, m, boardList, bombIndexes):
                 
 def bomb(boardList, bombIndexes):
     for index in bombIndexes:
-        boardList[index[0]][index[1]] = '!'
-        boardList[index[0]+1][index[1]] = '!'
-        boardList[index[0]][index[1]+1] = '!'
-        boardList[index[0]+1][index[1]+1] = '!'
+        boardList[index[0]][index[1]] = ''
+        boardList[index[0]+1][index[1]] = ''
+        boardList[index[0]][index[1]+1] = ''
+        boardList[index[0]+1][index[1]+1] = ''
 
         
 def isBombBlock(board, i, j):
-    if board[i][j] == '!':
+    if board[i][j] == '' or board[i][j] == ' ':
         return False
     
     if board[i][j] == board[i][j+1] == board[i+1][j] == board[i+1][j+1]:
         return True
     return False
+
+
+def calBombedBlock(boardList, n, m):
+    answer = 0
+    for i in range(n):
+        for j in range(m):
+            if not boardList[i][j].isalpha():
+                answer += 1
+    return answer
+
 
 def solution(m, n, board):
     answer = 0
@@ -30,7 +40,7 @@ def solution(m, n, board):
         for i in range(m):
             boardList[n-j-1][i] = board[i][j]
     
-    while(True):
+    while True:
         bombIndexes = []
         calBomb(n, m, boardList, bombIndexes)
         
@@ -41,14 +51,12 @@ def solution(m, n, board):
     
         for i in range(n):
             tmp = ''.join(boardList[i])
-            tmp = tmp.replace('!', '')
-            tmp = tmp.rjust(m, '!')
+            tmp = " " * (m-len(tmp)) + tmp
+            # tmp = tmp.replace('!', '')
+            # tmp = tmp.rjust(m, '!')
             boardList[i] = list(tmp[:])
             
     
-    for i in range(n):
-        for j in range(m):
-            if not boardList[i][j].isalpha():
-                answer += 1
+    answer = calBombedBlock(boardList, n, m)
                 
     return answer
