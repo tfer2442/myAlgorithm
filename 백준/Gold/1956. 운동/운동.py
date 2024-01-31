@@ -5,12 +5,6 @@ input = sys.stdin.readline
 
 INF = 1e9
 
-
-def initGraph(v, graph):
-    for i in range(1, v+1):
-        graph[i][i] = 0
-
-
 def updateMinLength(v, graph):
     for k in range(1, v+1):
         for i in range(1, v+1):
@@ -25,8 +19,6 @@ def updateMinLength(v, graph):
 v, e = map(int, input().split())
 graph = [[INF] * (v+1) for _ in range(v+1)]
 
-initGraph(v, graph)
-
 for _ in range(e):
     a, b, c = map(int, input().split())
     graph[a][b] = c
@@ -34,10 +26,10 @@ for _ in range(e):
 updateMinLength(v, graph)
 cycleLength = []
 
-for start, end in combinations(range(1, v+1), 2):
-    if graph[start][end] == INF or graph[end][start] == INF:
+for i in range(1, v+1):
+    if graph[i][i] == INF:
         continue
-    cycleLength.append(graph[start][end] + graph[end][start])
+    cycleLength.append(graph[i][i])
 
 if cycleLength:
     print(min(cycleLength))
