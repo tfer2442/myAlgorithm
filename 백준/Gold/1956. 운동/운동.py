@@ -14,8 +14,10 @@ def initGraph(v, graph):
 def updateMinLength(v, graph):
     for k in range(1, v+1):
         for i in range(1, v+1):
+            if graph[i][k] == INF:
+                continue
             for j in range(1, v+1):
-                if graph[i][k] == INF or graph[k][j] == INF:
+                if graph[k][j] == INF:
                     continue
                 graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
 
