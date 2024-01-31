@@ -1,9 +1,8 @@
 import sys
-from itertools import combinations
 
 input = sys.stdin.readline
 
-INF = 1e9
+INF = int(1e9)
 
 def updateMinLength(v, graph):
     for k in range(1, v+1):
