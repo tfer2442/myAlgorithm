@@ -19,10 +19,13 @@ for _ in range(e):
     s, e, value = map(int, input().split())
     graph[s].append((e, value))
 
+visited = [False] * (v+1)
 
 while heap:
     value, node = heappop(heap)
-
+    if visited[node]:
+        continue
+    visited[node] = True
     for newNode, newValue in graph[node]:
         if distance[newNode] <= value + newValue:
             continue
