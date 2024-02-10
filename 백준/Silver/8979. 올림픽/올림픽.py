@@ -14,8 +14,7 @@ for i in range(n):
 
 db.sort(key=lambda x: (-x[1], -x[2], -x[3]))
 
-for i in range(k):
+for i in range(n):
     if db[i][1:4] == medalOfK:
         print(i+1)
         break
-
