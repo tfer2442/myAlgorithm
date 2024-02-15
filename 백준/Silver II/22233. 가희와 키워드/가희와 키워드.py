@@ -9,7 +9,7 @@ for _ in range(n):
     keyword.add(input().strip())
 
 for _ in range(m):
-    blogPost = set(input().strip().split(','))
+    blogPost = list(input().strip().split(','))
 
     for word in blogPost:
         keyword.discard(word)
