@@ -3,9 +3,8 @@ input = sys.stdin.readline
 
 
 words = list(input().strip())
-
 bNum = words.count('b')
-minValue = 99999999999999
+minValue = 1000
 
 for i in range(len(words)):
     if i + bNum > len(words):
