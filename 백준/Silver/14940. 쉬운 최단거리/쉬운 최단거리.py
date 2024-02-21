@@ -25,13 +25,11 @@ while q:
     y, x = q.popleft()
 
     for a, b in d:
-        if y + a < 0 or y + a >= n or x + b < 0 or x + b >= m:
-            continue
+        r, c = y + a, x + b
 
-        if mapInfo[y+a][x+b] == 1:
-            mapInfo[y+a][x+b] = mapInfo[y][x] + 1
-            q.append((y+a, x+b))
-
+        if 0 <= r < n and 0 <= c < m and mapInfo[r][c] == 1:
+            mapInfo[r][c] = mapInfo[y][x] + 1
+            q.append((r, c))
 
 for i in range(n):
     for j in range(m):
