@@ -3,8 +3,6 @@ input = sys.stdin.readline
 
 hands = input().strip()
 stack = list()
-raser = list()
-bar = list()
 cutCnt = 0
 barCnt = 0
 
