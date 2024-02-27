@@ -1,36 +1,40 @@
 import sys
 input = sys.stdin.readline
 
+
+def sumTrees(h):
+    total = 0
+
+    for tree in trees:
+        if tree > h:
+            total += tree - h
+    return total
+
+
 n, m = map(int, input().split())
-l1 = list((map(int, input().split())))
+trees = list(map(int, input().split()))
 
 left = 0
-right = max(l1)
+right = 2_000_000_000
 mid = (left + right) // 2
+prevMid = 0
+total = 0
 
 while True:
+    total = sumTrees(mid)
     if left >= right:
-        print(mid)
-        break
-
-    Tsum = 0
-    for i in range(n):
-        if l1[i] - mid >= 0:
-            Tsum += l1[i] - mid
-        if Tsum > m:
-            break
-
-    if Tsum < m:
-        right = mid
-        mid = (right+left) // 2
-
-    elif Tsum > m:
-        left = mid
-        mid = (right+left) // 2
-        if left == mid:
+        if m > total:
+            print(mid-1)
+        else:
             print(mid)
-            break
-    else:
+        break
+    if total == m:
         print(mid)
         break
 
+    if total > m:
+        left = mid + 1
+        mid = (left + right) // 2
+    elif total < m:
+        right = mid
+        mid = (left + right) // 2
