@@ -15,7 +15,7 @@ n, m = map(int, input().split())
 trees = list(map(int, input().split()))
 
 left = 0
-right = 2_000_000_000
+right = max(trees)
 mid = (left + right) // 2
 prevMid = 0
 total = 0
