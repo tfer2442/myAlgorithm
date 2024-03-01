@@ -1,11 +1,10 @@
 import sys
-from collections import deque
 input = sys.stdin.readline
 
 n, k = map(int, input().split())
 table = input().strip()
-hamburger = deque()
-people = deque()
+hamburger = list()
+people = list()
 
 for i, element in enumerate(table):
     if element == 'H':
@@ -16,27 +15,28 @@ for i, element in enumerate(table):
         continue
 
 cnt = 0
-while hamburger and people:
-    hamburgerIndex = hamburger[0]
+hamburgerIndex = 0
+peopleIndex = 0
 
-    if 0 < people[0] - hamburgerIndex <= k:
-        hamburger.popleft()
-        people.popleft()
+while hamburgerIndex < len(hamburger) and peopleIndex < len(people):
+    if 0 < people[peopleIndex] - hamburger[hamburgerIndex] <= k:
+        hamburgerIndex += 1
+        peopleIndex += 1
         cnt += 1
         continue
 
-    if k < people[0] - hamburgerIndex:
-        hamburger.popleft()
+    if k < people[peopleIndex] - hamburger[hamburgerIndex]:
+        hamburgerIndex += 1
         continue
 
-    if 0 < hamburgerIndex - people[0] <= k:
-        hamburger.popleft()
-        people.popleft()
+    if 0 < hamburger[hamburgerIndex] - people[peopleIndex] <= k:
+        hamburgerIndex += 1
+        peopleIndex += 1
         cnt += 1
         continue
 
-    if k < hamburgerIndex - people[0]:
-        people.popleft()
+    if k < hamburger[hamburgerIndex] - people[peopleIndex]:
+        peopleIndex += 1
         continue
 
 print(cnt)
