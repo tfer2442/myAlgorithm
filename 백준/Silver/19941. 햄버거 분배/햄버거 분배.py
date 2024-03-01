@@ -3,10 +3,9 @@ from collections import deque
 input = sys.stdin.readline
 
 n, k = map(int, input().split())
-table = list(input().strip())
+table = input().strip()
 hamburger = deque()
 people = deque()
-
 
 for i, element in enumerate(table):
     if element == 'H':
