@@ -26,9 +26,6 @@ while q:
         print(1)
         exit(0)
 
-    if t > n-1:
-        break
-
     if arr[curRow][curCol] < t:
         continue
 
