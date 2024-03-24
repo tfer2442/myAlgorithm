@@ -2,24 +2,20 @@ import sys
 input = sys.stdin.readline
 
 
-def isPrime(num):
-    for i in range(2, int(num**0.5)+1):
-        if num % i == 0:
-            return False
-    return True
-
-
 def initPrimeList(num):
+    isPrime = [False, False] + [True] * (num-1)
     for i in range(2, num+1):
-        if isPrime(i):
+        if isPrime[i]:
             primes.append(i)
+            for j in range(i*2, num+1, i):
+                isPrime[j] = False
 
 
 n = int(input())
 if n == 1:
     print(0)
     exit(0)
-    
+
 primes = list()
 initPrimeList(n)
 
