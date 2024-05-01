@@ -10,7 +10,6 @@ totalTeacher = len(testPlace)
 for i in range(N):
     testPlace[i] -= B
 
-for i in range(N):
     if testPlace[i] <= 0:
         continue
     totalTeacher += math.ceil(testPlace[i]/C)
