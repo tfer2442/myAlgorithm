@@ -28,7 +28,7 @@ int main(void) {
 	sort(x, x + N);
 
 	int start = 0;
-	int end = x[N - 1];
+	int end = x[N - 1] - x[0];
 	int res = 0;
 	int count = 0;
 	int len = N;
