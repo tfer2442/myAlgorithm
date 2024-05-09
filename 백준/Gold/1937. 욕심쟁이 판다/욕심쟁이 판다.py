@@ -4,6 +4,10 @@ input = sys.stdin.readline
 
 
 def dfs(r, c):
+
+    if dp[r][c] == -1:
+        dp[r][c] = 0
+
     for dr, dc in d:
         nextR, nextC = r + dr, c + dc
 
@@ -29,4 +33,4 @@ for i in range(n):
     for j in range(n):
         answer = max(answer, dfs(i, j))
 
-print(answer+1)
+print(answer)
