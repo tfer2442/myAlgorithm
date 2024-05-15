@@ -1,24 +1,22 @@
+import sys
+input = sys.stdin.readline
+
 n, k = map(int, input().split())
+dp = [[0]*(k+1) for _ in range(n+1)]
+box = []
 
-w, v = [], []
+for i in range(n):
+    box.append(list(map(int, input().split())))
 
-for _ in range(n):
-    a, b = map(int, input().split())
-    w.append(a)
-    v.append(b)
+box.sort(key=lambda x: (x[0], x[1]))
+answer = 0
 
-l1 = [[0] * (k+1) for i in range(n)]
+for i in range(1, n+1):
+    for j in range(k+1):
+        if j < box[i - 1][0]:
+            dp[i][j] = dp[i-1][j]
+        else:
+            dp[i][j] = max(dp[i-1][j], dp[i-1][j - box[i - 1][0]] + box[i - 1][1])
+        answer = max(dp[i][j], answer)
 
-if w[0] <= k:
-    l1[0][w[0]] = v[0]
-
-for i in range(1, n):
-    for j in range(k, -1, -1):
-        l1[i][j] = l1[i-1][j]
-
-        if w[i] <= k and j == 0:
-            l1[i][w[i]] = v[i]
-        if j + w[i] <= k : # and l1[i-1][j] != 0
-            l1[i][j+w[i]] = max(l1[i-1][j+w[i]], l1[i-1][j]+v[i])
-
-print(max(l1[n-1]))
+print(answer)
