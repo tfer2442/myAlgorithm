@@ -2,7 +2,7 @@ import sys
 input = sys.stdin.readline
 
 x, y = map(int, input().split())
-winRate = int(y*100 /x)
+winRate = y*100//x
 
 if x == y or winRate == 99:
     print(-1)
@@ -14,7 +14,7 @@ answer = 1_000_000_000_000_000_000_000_000
 
 while left <= right:
     mid = (left + right) // 2
-    curRate = int((y+mid) * 100 / (x+mid) )
+    curRate = (y+mid) * 100 // (x+mid) 
 
     if curRate > winRate:
         answer = min(answer, mid)
