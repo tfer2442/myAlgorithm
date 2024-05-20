@@ -25,10 +25,8 @@ way = []
 while hq:
     value, node = heappop(hq)
 
-    if visited[node]:
+    if distance[node] < value:
         continue
-
-    visited[node] = True
 
     for nextNode in graph[node]:
         nextValue = graph[node][nextNode]
