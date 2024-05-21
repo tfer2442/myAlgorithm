@@ -21,36 +21,24 @@ hq = list()
 
 start = 1
 distance[start] = 0
-heappush(hq, (0, start))
+heappush(hq, (0, start, 0))
 ways = []
 
 while hq:
-    value, node = heappop(hq)
+    value, node, prev = heappop(hq)
 
     if value > distance[node]:
         continue
+    ways.append((prev, node))
 
     for nextNode in graph[node]:
         nextValue = graph[node][nextNode] + value
 
         if distance[nextNode] > nextValue:
-            heappush(hq, (nextValue, nextNode))
+            heappush(hq, (nextValue, nextNode, node))
             distance[nextNode] = nextValue
-            ways.append((node, nextNode))
 
-result = []
 
-for i in range(2, n+1):
-    end = i
-    for j in range(len(ways)-1, -1, -1):
-        if ways[j][1] == end:
-            node1 = min(ways[j][0], end)
-            node2 = max(ways[j][0], end)
-            result.append((node1, node2))
-            end = ways[j][0]
-
-result = set(result)
-
-print(len(result))
-for a, b in result:
-    print(a, b)
+print(len(ways)-1)
+for i in range(1, len(ways)):
+    print(ways[i][0], ways[i][1])
