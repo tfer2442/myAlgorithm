@@ -5,7 +5,6 @@ input = sys.stdin.readline
 def solution():
     n, m, w = map(int, input().split())
     graph = [{} for _ in range(n+1)]
-    totalEdge = 0
 
     for i in range(m):
         s, e, v = map(int, input().split())
@@ -13,7 +12,6 @@ def solution():
         if e not in graph[s]:
             graph[s][e] = v
             graph[e][s] = v
-            totalEdge += 2
         else:
             graph[s][e] = min(graph[s][e], v)
             graph[e][s] = min(graph[s][e], v)
@@ -23,17 +21,13 @@ def solution():
 
         if e not in graph[s]:
             graph[s][e] = -v
-            totalEdge += 1
         else:
             graph[s][e] = min(graph[s][e], -v)
 
-    INF = int(1e11)
+    INF = int(1e9)
     distance = [INF] * (n+1)
     start = 1
-    if start in graph[start]:
-        distance[start] = min(graph[start][start], 0)
-    else:
-        distance[start] = 0
+    distance[start] = 0
 
     for i in range(n):
         for j in range(1, n+1):
