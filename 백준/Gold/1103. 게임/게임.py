@@ -7,14 +7,13 @@ def dfs(row, col):
     if dp[row][col] == -1:
         dp[row][col] = 0
 
-
     value = int(board[row][col])
 
     for dr, dc in d:
         nextR, nextC = dr * value + row, dc * value + col
 
         if 0 <= nextR < n and 0 <= nextC < m and board[nextR][nextC] != 'H':
-            if visited[nextR][nextC] == True:
+            if visited[nextR][nextC]:
                 print(-1)
                 exit(0)
             if dp[nextR][nextC] == -1:
@@ -23,7 +22,6 @@ def dfs(row, col):
                 visited[nextR][nextC] = False
             else:
                 dp[row][col] = max(dp[row][col], dp[nextR][nextC]+1)
-
 
     return dp[row][col] + 1
 
