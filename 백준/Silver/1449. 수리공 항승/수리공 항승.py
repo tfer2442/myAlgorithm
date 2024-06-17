@@ -15,10 +15,11 @@ end = start + l
 answer = 1
 
 for i in range(n):
-    if start < parts[i] < end:
+    if start <= parts[i] <= end:
         continue
     start = parts[i] - 5
     end = start + l
     answer += 1
 
 print(answer)
+
