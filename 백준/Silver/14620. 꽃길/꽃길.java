@@ -22,7 +22,7 @@ public class Main {
 	}
 	
 	
-	static void backtracking(int cnt) {
+	static void backtracking(int row, int col, int cnt) {
 		if (cnt == 3) {
 			int total = 0;
 			for (int i = 0; i < n; i++) {
@@ -36,7 +36,7 @@ public class Main {
 			return;
 		}
 		
-		for (int i = 1; i < n-1; i++) {
+		for (int i = row; i < n-1; i++) {
 			for (int j = 1; j < n-1; j++) {
 				if (isPossible(i, j)) {
 					visited[i][j] = true;
@@ -44,7 +44,7 @@ public class Main {
 					visited[i][j-1] = true;
 					visited[i+1][j] = true;
 					visited[i][j+1] = true;			
-					backtracking(cnt+1);
+					backtracking(i, j, cnt+1);
 					visited[i][j] = false;
 					visited[i-1][j] = false;
 					visited[i][j-1] = false;
@@ -70,7 +70,7 @@ public class Main {
 			}
 		}
 		
-		backtracking(0);
+		backtracking(1, 1, 0);
 		System.out.println(minValue);
 	}
 }
