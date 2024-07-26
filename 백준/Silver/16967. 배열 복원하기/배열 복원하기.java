@@ -10,6 +10,7 @@ public class Main {
 	public static void main(String[] args) throws IOException{
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 		String[] tmp = br.readLine().split(" ");
 		H = Integer.parseInt(tmp[0]);
 		W = Integer.parseInt(tmp[1]);
@@ -35,9 +36,10 @@ public class Main {
 		
 		for (int i = 0; i < H; i++) {
 			for (int j = 0; j < W; j++) {
-				System.out.print(A[i][j] + " ");
+				sb.append(A[i][j]).append(" ");
 			}
-			System.out.println();
+			sb.append("\n");
 		}
+		System.out.println(sb);
 	}
 }
