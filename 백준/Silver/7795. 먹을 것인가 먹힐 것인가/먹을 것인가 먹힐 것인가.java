@@ -4,13 +4,14 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class Main {
+	public static int T;
 	public static int N, M;
 	public static int[] A, B;
 	
 	public static void main(String[] args) throws IOException{
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int T = Integer.parseInt(br.readLine());
+		T = Integer.parseInt(br.readLine());
 		
 		for (int t = 1; t <= T; t++) {
 			String[] tmp = br.readLine().split(" ");
@@ -29,26 +30,23 @@ public class Main {
 				B[i] = Integer.parseInt(tmp[i]);
 			}
 			
+			Arrays.sort(A);
 			Arrays.sort(B);
-			int result = 0;
-			for (int i = 0; i < N; i++) {
-				int left = 0;
-				int right = M-1;
-				
-				while (left <= right) {
-					int mid = (left + right) / 2;
-					
-					if (B[mid] < A[i]) {
-						left = mid + 1;
-					} else if (B[mid] >= A[i]) {
-						right = mid - 1;
+			int right = 0;
+			int total = 0;
+			
+			for (int left = 0; left < N; left++) {
+				while (right < M) {
+					if (A[left] > B[right]) {
+						right++;
+					} else {
+						break;
 					}
 				}
-				result += right + 1;
+				total += right;
 			}
-			System.out.println(result);
+			System.out.println(total);
 		}
-		
 	}
 
 }
