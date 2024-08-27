@@ -22,6 +22,7 @@ public class Solution {
 			int nextRow = row + d[i][0];
 			int nextCol = col + d[i][1];
 			if (0 > nextRow || nextRow >= N || 0 > nextCol || nextCol >= N || visited[board[nextRow][nextCol]]) continue;
+			if (i == 2 && nextRow-a > nextCol-b) continue;
 			
 			visited[board[nextRow][nextCol]] = true;
 			dfs(nextRow, nextCol, i, cnt+1);
