@@ -13,19 +13,20 @@ public class Solution {
 
 	public static void dfs(int row, int col, int dir, int cnt) {
 		
-		if (row == a && col == b && cnt >= 4) {
+		if (row == a && col == b && cnt >= 4) { // 다시 되돌아 왔을 때 & 한바퀴 빙 도는 것의 최소값이 4
 			answer = Math.max(answer, cnt);
 			return;
 		}
 		
-		for (int i = dir; i < 4; i++) {
+		for (int i = dir; i < 4; i++) { // 넘겨 받은 탐색 방향 순서대로 탐색
+			if (cnt == 0 && i >= 1) return; // 대각선 오른쪽 위로 탐색하지 못한다면 실행 안함
 			int nextRow = row + d[i][0];
 			int nextCol = col + d[i][1];
-			if (0 > nextRow || nextRow >= N || 0 > nextCol || nextCol >= N || visited[board[nextRow][nextCol]]) continue;
-			if (i == 2 && nextRow-a > nextCol-b) continue;
+			if (0 > nextRow || nextRow >= N || 0 > nextCol || nextCol >= N || visited[board[nextRow][nextCol]]) continue; // 범위 초과 처리
+			if (i == 2 && nextRow-a > nextCol-b) continue; // 대각선 왼쪽 아래로 더 내려갈 필요 없을 때 실행 안함
 			
 			visited[board[nextRow][nextCol]] = true;
-			dfs(nextRow, nextCol, i, cnt+1);
+			dfs(nextRow, nextCol, i, cnt+1); // 현재 탐색하는 방향을 그대로 넘겨줌
 			visited[board[nextRow][nextCol]] = false;
 
 		}		
