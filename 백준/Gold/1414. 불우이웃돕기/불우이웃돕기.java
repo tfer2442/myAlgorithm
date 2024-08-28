@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.PriorityQueue;
 
 public class Main {
@@ -25,9 +24,6 @@ public class Main {
 		
 		for (int i = 0; i < N; i++) {
 			graph[i] = new ArrayList<>();
-		}
-		
-		for (int i = 0; i < N; i++) {
 			String tmp = br.readLine();
 			
 			for (int j = 0; j < N; j++) {
