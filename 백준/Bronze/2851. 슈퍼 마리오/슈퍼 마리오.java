@@ -13,21 +13,17 @@ public class Main {
 			arr[i] = Integer.parseInt(br.readLine());
 		}
 		
-		int answer2 = 0;
-		int answer = Integer.MAX_VALUE;
+		int answer = 0;
 		for (int i = 0; i < 10; i++) {
-			int total = 0;
-			for (int j = 0; j <= i; j++) {
-				total += arr[j];
-			}
-			if (Math.abs(100-total) < answer) {
-				answer = Math.abs(100-total);
-				answer2 = total;
-			} else if (Math.abs(100-total) == answer) {
-				answer2 = Math.max(answer2, total);
+			int cur = arr[i];
+			
+			if (Math.abs(100-answer) >= Math.abs(100-(cur+answer))) {
+				answer += cur;
+			} else {
+				break;
 			}
 		}
-		System.out.println(answer2);
+		System.out.println(answer);
 	}
 
 }
