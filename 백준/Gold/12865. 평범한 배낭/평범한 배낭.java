@@ -1,41 +1,39 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	public static int n, k;
-	public static int[][] arr;
-	public static int[][] dp;
-	
-	public static void main(String[] args) throws IOException{
-		// TODO Auto-generated method stub
+
+	static int N, K;
+	static int[] weights, values;
+	static int[][] dp;
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] tmp = br.readLine().split(" ");
-		
-		n = Integer.parseInt(tmp[0]);
-		k = Integer.parseInt(tmp[1]);
-		
-		arr = new int[n][2];
-		dp = new int[n+1][k+1];
-		
-		for (int i = 0; i < n; i++) {
-			tmp = br.readLine().split(" ");
-			arr[i][0] = Integer.parseInt(tmp[0]);
-			arr[i][1] = Integer.parseInt(tmp[1]);
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		weights = new int[N + 1];
+		values = new int[N + 1];
+		dp = new int[N + 1][K + 1];
+		for (int i = 1; i <= N; i++) {
+			st = new StringTokenizer(br.readLine());
+			weights[i] = Integer.parseInt(st.nextToken());
+			values[i] = Integer.parseInt(st.nextToken());
 		}
-		
-		for (int i = 1; i <= n; i++) {
-			for (int j = 0; j <= k; j++) {
-				if (arr[i-1][0] > j) {
-					dp[i][j] = dp[i-1][j];
-					continue;
+
+		for (int i = 1; i <= N; i++) { // 물품 번호
+			for (int j = 1; j <= K; j++) { // 가방의 무게
+				// 가방 무게보다 무거우면 넣지 못함
+				if (weights[i] > j) {
+					dp[i][j] = dp[i - 1][j];
+				} 
+				// 가방 무게보다 작거나 같다면 넣거나 넣지 않을 수 있음
+				else {
+					dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weights[i]] + values[i]);
 				}
-				dp[i][j] = Math.max(dp[i-1][j], arr[i-1][1] + dp[i-1][j-arr[i-1][0]]);
 			}
 		}
-		
-		System.out.println(dp[n][k]);
-		
+		System.out.println(dp[N][K]);
 	}
-
 }
