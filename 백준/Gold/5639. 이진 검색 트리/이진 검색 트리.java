@@ -51,7 +51,7 @@ public class Main {
 		while (true) {
 			String tmp = br.readLine();
 			
-			if (tmp == null || tmp.equals("")) {
+			if (tmp == null) {
 				break;
 			}
 			
