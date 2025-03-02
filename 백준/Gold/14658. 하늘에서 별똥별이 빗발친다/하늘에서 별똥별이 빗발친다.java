@@ -25,21 +25,23 @@ public class Main {
 		int maxValue = 0;
 		
 		for (int i = 0; i < K; i++) {
-			for (int j = 0; j < K; j++) {
-				int answer = 0;
-				int sr = nums[i][0];
-				int sc = nums[i][1];
-				int er = nums[j][0];
-				int ec = nums[j][1];
-				
-				for (int k = 0; k < K; k++) {
-					int curR = nums[k][0];
-					int curC = nums[k][1];
-					
-					if (er <= curR && er+L >= curR && sc <= curC && sc+L >= curC) answer++;
-				}
-				maxValue = Math.max(answer, maxValue);
-			}
+		    for (int j = i; j < K; j++) {  
+		        int answer = 0;
+		        
+		        // 두 별의 좌표로부터 왼쪽 상단 후보 좌표 결정
+		        int candidateX = Math.min(nums[i][0], nums[j][0]);
+		        int candidateY = Math.max(nums[i][1], nums[j][1]);
+		        
+		        for (int k = 0; k < K; k++) {
+		            int curX = nums[k][0];
+		            int curY = nums[k][1];
+
+		            if (candidateX <= curX && curX <= candidateX + L &&
+		                candidateY - L <= curY && curY <= candidateY)
+		                answer++;
+		        }
+		        maxValue = Math.max(answer, maxValue);
+		    }
 		}
 		System.out.println(K-maxValue);
 	}
