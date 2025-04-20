@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
+
 public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -33,20 +34,27 @@ public class Main {
             }
         }
         
-        positive = Arrays.copyOf(positive, posCount);
-        negative = Arrays.copyOf(negative, negCount);
+        Integer[] posArr = new Integer[posCount];
+        for(int i = 0; i < posCount; i++) {
+            posArr[i] = positive[i];
+        }
         
-        Arrays.sort(positive, (a, b) -> b - a);
-        Arrays.sort(negative, (a, b) -> b - a);
+        Integer[] negArr = new Integer[negCount];
+        for(int i = 0; i < negCount; i++) {
+            negArr[i] = negative[i];
+        }
+        
+        Arrays.sort(posArr, (a, b) -> b - a);
+        Arrays.sort(negArr, (a, b) -> b - a);
         
         long totalDistance = 0;
         
         for(int i = 0; i < posCount; i += M) {
-            totalDistance += positive[i] * 2;
+            totalDistance += posArr[i] * 2;
         }
         
         for(int i = 0; i < negCount; i += M) {
-            totalDistance += negative[i] * 2;
+            totalDistance += negArr[i] * 2;
         }
         
         totalDistance -= maxDistance;
