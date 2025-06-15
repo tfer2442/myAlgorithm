@@ -1,78 +1,44 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int n;
-	static int total = 0;
-	static boolean[][] board;
-	
-	private static boolean isPossiblePosition(int row, int col) {
-		// 왼쪽 위
-		for (int i = 1; i < n; i++) {
-			int dRow = row - i;
-			int dCol = col - i;
-			
-			if (dRow < 0 || dCol < 0) {
-				break;
-			}
-			
-			if (board[dRow][dCol]) {
-				return false;
-			}
-		}
-		
-		// 오른쪽 위
-		for (int i = 1; i < n; i++) {
-			int dRow = row - i;
-			int dCol = col + i;
-			
-			if (dRow < 0 || dCol >= n) {
-				break;
-			}
-			
-			if (board[dRow][dCol]) {
-				return false;
-			}
-		}
-		
-		// 위
-		for (int i = 1; i < n; i++) {
-			int dRow = row - i;
-			
-			if (dRow < 0) {
-				break;
-			}
-			
-			if (board[dRow][col]) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
-	private static void backtracking(int row) {
-		if (row == n) {
-			total += 1;
-			return;
-		}
-		
-		for (int i = 0; i < n; i++) {
-			if (isPossiblePosition(row, i)) {
-				board[row][i] = true;
-				backtracking(row+1);
-				board[row][i] = false;
-			}
-		}
-	}
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(br.readLine());
-		board = new boolean[n][n];
-		
-		backtracking(0);
-		System.out.println(total);
-	}
+    public static int N;
+    public static int[] arr;
+    public static int answer;
+    
+    public static boolean isAvailable(int col, int row) {
+        for (int i = 0; i < row; i++) {
+            // 같은 열에 있거나, 대각선에 있으면 false
+            if (arr[i] == col || Math.abs(arr[i] - col) == Math.abs(i - row)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static void backtracking(int row) {
+        if (row == N) {  // N개 모두 배치 완료
+            answer++;
+            return;
+        }
+        
+        for (int col = 0; col < N; col++) {
+            if (isAvailable(col, row)) {
+                arr[row] = col;
+                backtracking(row + 1);
+            }
+        }
+    }
+    
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        
+        arr = new int[N];
+        answer = 0;
+        
+        backtracking(0);
+        
+        System.out.println(answer);  // 결과 출력
+    }
 }
