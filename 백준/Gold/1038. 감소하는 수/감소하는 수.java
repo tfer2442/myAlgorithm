@@ -1,55 +1,36 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int n;
-	static ArrayList<Long> arr = new ArrayList<>();
+	public static int N;
+	public static ArrayList<Long> arr;
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Scanner sc = new Scanner(System.in);
-		n = sc.nextInt();
+	public static void dfs(long value) {
+		arr.add(value);
 		
-		for (long i = 0; i <= 9; i++) {
-			arr.add(i);
-		}
+		int last = (int)(value % 10);
 		
-		for (int i = 2; i <= 10; i++) {
-			int len = arr.size();
-			
-			for (int j = 1; j <= 9; j++) {
-				for (int k = 0; k < len; k++) {
-					String a = Long.toString(arr.get(k));
-					
-					if (a.length() == i) {
-						break;
-					}
-					
-					if (a.length() != i-1) {
-						continue;
-					}
-					
-					String b = Integer.toString(j);
-					
-					long aFirstNum = Long.parseLong(a.substring(0, 1));
-					long bFirstNum = Long.parseLong(b.substring(0, 1));
-					
-					
-					if (aFirstNum >= bFirstNum) {
-						break;
-					}
-					arr.add(Long.parseLong(b.concat(a)));
-					
-				}
-			}
-
-		}
-		
-		if (arr.size() <= n) {
-			System.out.println(-1);
-		} else {
-			System.out.println(arr.get(n));
+		for (int i = 0; i < last; i++) {
+			dfs(value*10+i);
 		}
 	}
-
+	
+	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		arr = new ArrayList<>();
+		
+		for (int i = 0; i <= 9; i++) {
+			dfs(i);
+		}
+		
+		Collections.sort(arr);
+		
+		if (arr.size() <= N) {
+			System.out.println(-1);
+		} else {
+			System.out.println(arr.get(N));			
+		}
+	}
 }
