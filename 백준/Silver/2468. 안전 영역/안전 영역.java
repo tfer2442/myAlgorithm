@@ -1,81 +1,59 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int n;
-	static int[][] board;
-	static boolean[][] visited;
-	static int[][] d = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
-
-	public static void bfs(int sRow, int sCol) {
-		Deque<int[]> deque = new ArrayDeque<>();
-		deque.addLast(new int[]{sRow, sCol});
-		visited[sRow][sCol] = true;
+	public static int N;
+	public static int answer;
+	public static int[][] board;
+	public static int[][] d = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
+	
+	public static void dfs(boolean[][] visited, int r, int c, int h) {
+		visited[r][c] = true;
 		
-		while (!deque.isEmpty()) {
-			int[] cur = deque.removeFirst();
-						
-			for (int[] nextD : d) {
-				int nextRow = cur[0] + nextD[0];
-				int nextCol = cur[1] + nextD[1];
-				
-				if (nextRow >= n || nextRow < 0 || nextCol >= n || nextCol < 0) continue;
+		for (int[] dd : d) {
+			int nextR = r + dd[0];
+			int nextC = c + dd[1];
 			
-				if (visited[nextRow][nextCol]) continue;
-				
-				visited[nextRow][nextCol] = true;
-				deque.addLast(new int[]{nextRow, nextCol});	
-			}
+			if (nextR < 0 || nextR >= N || nextC < 0 || nextC >= N) continue;
+			if (visited[nextR][nextC]) continue;
+			if (board[nextR][nextC] <= h) continue;
+			
+			dfs(visited, nextR, nextC, h);
 		}
 	}
 	
-	
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));		
-		n = Integer.parseInt(br.readLine());
-		board = new int[n][n];
-		
-		int MAX_VALUE = -1;
-		
-		for (int i = 0; i < n; i++) {
-			String[] tmp = br.readLine().split(" ");
-			
-			for (int j = 0; j < n; j++) {
-				board[i][j] = Integer.parseInt(tmp[j]);
-				MAX_VALUE = Math.max(MAX_VALUE, board[i][j]);
-			}
-		}
-		
+	public static void calculate(int h) {
+		boolean[][] visited = new boolean[N][N];
 		int result = 0;
 		
-		for (int i = 0; i < MAX_VALUE; i++) {
-			visited = new boolean[n][n];
-			int cnt = 0;
-			
-			for (int j = 0; j < n; j++) {
-				for (int k = 0; k < n; k++) {
-					if (board[j][k] <= i) {
-						visited[j][k] = true;
-					}
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if (!visited[i][j] && board[i][j] > h) {
+					dfs(visited, i, j, h);
+					result++;
 				}
 			}
-			
-			for (int j = 0; j < n; j++) {
-				for (int k = 0; k < n; k++) {
-					if (visited[j][k] == false) {
-						bfs(j, k);
-						cnt++;
-					}
-				}
+		}
+		answer = Math.max(answer, result);
+	}
+
+	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		board = new int[N][N];
+		
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				board[i][j] = Integer.parseInt(st.nextToken());
 			}
-			
-			result = Math.max(result, cnt);
 		}
 		
-		System.out.println(result);
+		for (int i = 0; i < 100; i++) {
+			calculate(i);
+		}
+		
+		System.out.println(answer);
 	}
-}
+} 
