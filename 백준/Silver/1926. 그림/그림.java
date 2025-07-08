@@ -1,73 +1,62 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int n, m;
-	static int maxSize = 0;
-	static int paintCnt = 0;
-	static Deque<int[]> dq = new ArrayDeque<>();
-	static boolean[][] visited;
-	static int[][] d = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
-	static int[][] board;
+	public static int N, M;
+	public static int[][] board;
+	public static boolean[][] visited;
+	public static int[][] d = {{-1 ,0}, {0, -1}, {0, 1}, {1, 0}};
+	public static int pCount;
+	public static int pMax;
+	public static int curSize;
 	
-	static void bfs(int row, int col) {
-		int size = 0;
-		dq.add(new int[] {row, col});
+	public static void dfs(int r, int c) {
+		visited[r][c] = true;
 		
-		while(!dq.isEmpty()) {
-			size++;
-			int[] cntNode = dq.poll();
-			int cntRow = cntNode[0];
-			int cntCol = cntNode[1];
+		for (int[] dd : d) {
+			int nextR = r + dd[0];
+			int nextC = c + dd[1];
 			
-			for (int[] curD : d) {
-				int nextRow = curD[0] + cntRow;
-				int nextCol = curD[1] + cntCol;
-				
-				if (0 > nextRow || nextRow >= n || 0 > nextCol || nextCol >= m) continue;
-				if (board[nextRow][nextCol] == 0) continue;
-				if (visited[nextRow][nextCol]) continue;
-				
-				visited[nextRow][nextCol] = true;
-				dq.add(new int[] {nextRow, nextCol});
+			if (nextR < 0 || nextR >= N || nextC < 0 || nextC >= M) continue;
+			if (visited[nextR][nextC]) continue;
+			if (board[nextR][nextC] == 1) {
+				dfs(nextR, nextC);
+				curSize++;
 			}
 		}
-		maxSize = Math.max(maxSize, size);
 	}
 	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] tmp = br.readLine().split(" ");
-		n = Integer.parseInt(tmp[0]);
-		m = Integer.parseInt(tmp[1]);
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		visited = new boolean[n][m];
-		board = new int[n][m];
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		board = new int[N][M];
 		
-		for (int i = 0; i < n; i++) {
-			tmp = br.readLine().split(" ");
-			
-			for (int j = 0; j < m; j++) {
-				board[i][j] = Integer.parseInt(tmp[j]);
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < M; j++) {
+				board[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 		
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
+		visited = new boolean[N][M];
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
 				if (!visited[i][j] && board[i][j] == 1) {
-					visited[i][j] = true;
-					paintCnt++;
-					bfs(i, j);
+					curSize = 1;
+					pCount++;
+					dfs(i, j);	
+					pMax = Math.max(pMax, curSize);
 				}
-				
 			}
 		}
 		
-		System.out.println(paintCnt);
-		System.out.println(maxSize);
+		System.out.println(pCount);
+		System.out.println(pMax);
 	}
+
 }
