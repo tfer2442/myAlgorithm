@@ -1,75 +1,75 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int n, m;
-	static char[][] board;
-	static int myTeam;
-	static int enemy;
-	static boolean[][] visited;
-	static int[][] d = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
+	public static int N, M;
+	public static int[][] board;
+	public static boolean[][] visited;
+	public static int myForce, enemyForce;
+	public static int[][] d = {{-1 ,0}, {0, -1}, {0, 1}, {1, 0}};
 	
-	static void bfs(int row, int col, char point) {
-		Deque<int[]> dq = new ArrayDeque<>();
-		int size = 0;
-		dq.add(new int[] {row, col});
+	public static void bfs(int target, int r, int c) {
+		ArrayDeque<int[]> dq = new ArrayDeque<>();
+		
+		visited[r][c] = true;
+		dq.offer(new int[] {r, c});
+		int cnt = 1;
 		
 		while (!dq.isEmpty()) {
-			size++;
 			int[] node = dq.poll();
-			int cntRow = node[0];
-			int cntCol = node[1];
 			
-			for (int[] curD : d) {
-				int nextRow = curD[0] + cntRow;
-				int nextCol = curD[1] + cntCol;
+			for (int[] dd : d) {
+				int nextR = node[0] + dd[0];
+				int nextC = node[1] + dd[1];
 				
-				if (0 > nextRow || nextRow >= n || 0 > nextCol || nextCol >= m) continue;
-				if (visited[nextRow][nextCol]) continue;
-				if (board[nextRow][nextCol] == point) {
-					visited[nextRow][nextCol] = true;
-					dq.add(new int[] {nextRow, nextCol});
-				}
-			}
+				if (nextR < 0 || nextR >= N || nextC < 0 || nextC >= M) continue;
+				if (visited[nextR][nextC]) continue;
+				if (target != board[nextR][nextC]) continue;
+				
+				visited[nextR][nextC] = true;
+				dq.offer(new int[] {nextR, nextC});
+				cnt++;
+			}	
 		}
 		
-		if (point == 'W') {
-			myTeam += size*size;
+		if (target == 0) {
+			myForce += cnt * cnt;
 		} else {
-			enemy += size*size;
+			enemyForce += cnt * cnt;
 		}
 	}
 	
-	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] tmp = br.readLine().split(" ");
-		m = Integer.parseInt(tmp[0]);
-		n = Integer.parseInt(tmp[1]);
-		board = new char[n][m];
-		visited = new boolean[n][m];
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		for (int i = 0; i < n; i++) {
-			tmp = br.readLine().split("");
-			for (int j = 0; j < m; j++) {
-				board[i][j] = tmp[j].charAt(0);
-			}
-		}
+		M = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
 		
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				if (!visited[i][j]) {
-					visited[i][j] = true;
-					char point = (board[i][j] == 'W' ? 'W' : 'B');
-					bfs(i, j, point);
+		board = new int[N][M];
+		
+		for (int i = 0; i < N; i++) {
+			String tmp = br.readLine();
+			for (int j = 0; j < M; j++) {
+				if (tmp.charAt(j) == 'W') {
+					board[i][j] = 0;
+				} else {
+					board[i][j] = 1;
 				}
 			}
 		}
-		System.out.println(myTeam + " " + enemy);
+		
+		visited = new boolean[N][M];
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (visited[i][j]) continue;
+				bfs(board[i][j], i, j);
+			}
+		}
+		
+		System.out.println(myForce + " " + enemyForce);
 	}
 
 }
