@@ -1,92 +1,59 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int n;
-	static boolean[] visited;
-	static boolean[][][] scvVisited = new boolean[61][61][61];
-	static List<int[]> perNums;
-	static List<Integer> scvs;
-	static int[] attacks = {9, 3, 1};
-	static int result = Integer.MAX_VALUE;
+	public static int N;
+	public static int[] scv;
+	public static int answer = Integer.MAX_VALUE;
+	public static int[][][] visited = new int[61][61][61];
 	
-	public static void permutations(List<Integer> nums, int depth) {
-		if (depth == 3) {
-			int[] tmp = new int[3];
-	
-			for (int i = 0; i < 3; i++) {
-				tmp[i] = nums.get(i);
-			}
-			perNums.add(tmp);
-			return;
-		}
+	public static void dfs(int depth, int hp1, int hp2, int hp3) {
+		int[] tmp = {hp1, hp2, hp3};
+		Arrays.sort(tmp);
 		
 		for (int i = 0; i < 3; i++) {
-			if (!visited[i]) {
-				visited[i] = true;
-				nums.add(attacks[i]);
-				permutations(nums, depth+1);
-				visited[i] = false;
-				nums.remove(nums.size()-1);
+			if (tmp[i] < 0) tmp[i] = 0;
+		}
+		
+		if (tmp[0] == 0 && tmp[1] == 0 && tmp[2] == 0) {
+			answer = Math.min(answer, depth);
+			return;
+		}
+		
+		if (visited[tmp[0]][tmp[1]][tmp[2]] <= depth) return;
+		visited[tmp[0]][tmp[1]][tmp[2]] = depth;
+		
+		dfs(depth+1, tmp[0]-9, tmp[1]-3, tmp[2]-1);
+		dfs(depth+1, tmp[0]-9, tmp[1]-1, tmp[2]-3);
+		dfs(depth+1, tmp[0]-3, tmp[1]-9, tmp[2]-1);
+		dfs(depth+1, tmp[0]-3, tmp[1]-1, tmp[2]-9);
+		dfs(depth+1, tmp[0]-1, tmp[1]-9, tmp[2]-3);
+		dfs(depth+1, tmp[0]-1, tmp[1]-3, tmp[2]-9);
+		
+		
+	}
+
+	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		scv = new int[3];
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			scv[i] = Integer.parseInt(st.nextToken());
+		}
+		Arrays.sort(scv);
+		
+		for (int i = 0; i < 61; i++) {
+			for (int j = 0; j < 61; j++) {
+				for (int k = 0; k < 61; k++) {
+					visited[i][j][k] = Integer.MAX_VALUE;
+				}
 			}
 		}
-	}
-	
-	public static void dfs(int hp1, int hp2, int hp3, int depth) {
-		if (depth >= result) {
-			return;
-		}
 		
-		if (hp1 <= 0 && hp2 <= 0 && hp3 <= 0) {
-			result = Math.min(result, depth);
-			return;
-		}
-		
-		Integer[] hp = {hp1, hp2, hp3};
-		
-		Arrays.sort(hp, (a, b) -> {
-			return -1 * (a-b);
-		});
-				
-		for (int i = 0; i < 3; i++) {
-			if (hp[i] < 0) {
-				hp[i] = 0;
-			}
-		}
-		
-		if (scvVisited[hp[0]][hp[1]][hp[2]]) {
-			return;
-		}
-		scvVisited[hp[0]][hp[1]][hp[2]] = true;
-		
-		for (int i = 0; i < perNums.size(); i++) {
-			dfs(hp[0]-perNums.get(i)[0], hp[1]-perNums.get(i)[1], hp[2]-perNums.get(i)[2], depth+1);
-		}
-	}
-	
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));		
-		n = Integer.parseInt(br.readLine());
-		String[] tmp = br.readLine().split(" ");
-		scvs = new ArrayList<>();
-		visited = new boolean[3];
-		perNums = new ArrayList<>();
-		
-		for (int i = 0; i < n; i++) {
-			scvs.add(Integer.parseInt(tmp[i]));
-		}
-		
-		for (int i = n-1; i < 3; i++) {
-			scvs.add(0);
-		}
-		
-		permutations(new ArrayList<>(), 0);
-		dfs(scvs.get(0), scvs.get(1), scvs.get(2), 0);
-		System.out.println(result);
+		dfs(0, scv[0], scv[1], scv[2]);
+		System.out.println(answer);
 	}
 }
