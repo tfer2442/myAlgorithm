@@ -1,63 +1,49 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int M, N;
-	static int[] arr;
-	static int left = 1;
-	static int right = 1;
-	static int mid;
+	public static int N, M;
+	public static int[] snacks;
 	
-	static boolean isDivideSnack(int mid) {
+	public static int calculate(int mid) {
 		int cnt = 0;
 		
 		for (int i = 0; i < N; i++) {
-			cnt += arr[i]/mid;
-			if (cnt >= M) return true;
+			cnt += snacks[i] / mid;
 		}
-		
-		return false;
+		return cnt;
 	}
-	
-	public static void main(String[] args) throws IOException{
+
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] tmp = br.readLine().split(" ");
-		M = Integer.parseInt(tmp[0]);	
-		N = Integer.parseInt(tmp[1]);
-		arr = new int[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		M = Integer.parseInt(st.nextToken()); // 조카의 수 
+		N = Integer.parseInt(st.nextToken()); // 과자의 수
 		
-		tmp = br.readLine().split(" ");
+		snacks = new int[N];
+		st = new StringTokenizer(br.readLine());
+		
+		int left = 1;
+		int right = 0;
 		
 		for (int i = 0; i < N; i++) {
-			arr[i] = Integer.parseInt(tmp[i]);
-		}
-		
-		int sum = 0;
-		for (int i = 0; i < N; i++) {
-			right = Math.max(right, arr[i]);
-			sum += arr[i];
-		}
-		
-		if (sum < M) {
-			System.out.println(0);
-			System.exit(0);
+			snacks[i] = Integer.parseInt(st.nextToken());
+			right = Math.max(snacks[i], right);
 		}
 		
 		int answer = 0;
+		
 		while (left <= right) {
-			mid = (left+right)/2;
+			int mid = (left + right) / 2;
 			
-			if (isDivideSnack(mid)) {
-				answer = Math.max(answer, mid);
+			if (calculate(mid) >= M) {
+				answer = mid;
 				left = mid + 1;
 			} else {
 				right = mid - 1;
 			}
 		}
-		
 		System.out.println(answer);
 	}
-
 }
