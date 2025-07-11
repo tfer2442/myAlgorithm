@@ -1,52 +1,52 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
 
 public class Main {
 	public static int N, K;
-	public static int[] arr;
+	public static int[] scores;
 	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] tmp = br.readLine().split(" ");
-		N = Integer.parseInt(tmp[0]);
-		K = Integer.parseInt(tmp[1]);
-		arr = new int[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		tmp = br.readLine().split(" ");
-		int left = 0;
-		int right = 0;
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		scores = new int[N];
+		st = new StringTokenizer(br.readLine());
 		
+		int total = 0;
+
 		for (int i = 0; i < N; i++) {
-			arr[i] = Integer.parseInt(tmp[i]);
-			right += arr[i];
+			scores[i] = Integer.parseInt(st.nextToken());
+			total += scores[i];
 		}
 		
+		int left = 0;
+		int right = total/K;
 		int answer = 0;
 		
 		while (left <= right) {
 			int mid = (left+right)/2;
-			int group = 0;
-			int scoreTotal = 0;
 			
-			for (int i = 0; i < N; i++) {
-				if (scoreTotal + arr[i] < mid) {
-					scoreTotal += arr[i];
-				} else {
-					scoreTotal = 0;
-					group++;
+			int cnt = 0;
+			int sum = 0;
+			for (int score : scores) {
+				sum += score;
+				if (sum >= mid) {
+					sum = 0;
+					cnt++;
 				}
 			}
 			
-			if (group >= K) {
-				left = mid+1;
-				answer = Math.max(answer, mid);
-			} else if (group < K) {
-				right = mid-1;
+			if (cnt >= K) {
+				answer = mid;
+				left = mid + 1;
+			} else {
+				right = mid - 1;
 			}
 		}
 		
-		System.out.println(answer);	
+		System.out.println(answer);
 	}
 }
