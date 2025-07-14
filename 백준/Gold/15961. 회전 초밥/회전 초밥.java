@@ -1,73 +1,53 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	public static int n, d, k, c;
-	public static int[] arr;
-	public static Map<Integer, Integer> hashMap = new HashMap<>();
-	
-	public static void main(String[] args) throws IOException{
+	// 접시 수, 초밥 가짓 수, 연속 먹는 접시 수, 쿠폰 번호
+	public static int N, d, k, c;
+	public static int[] nums;
+	public static HashMap<Integer, Integer> hm = new HashMap<>();
+
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		String[] tmp = br.readLine().split(" ");
-		n = Integer.parseInt(tmp[0]);
-		d = Integer.parseInt(tmp[1]);
-		k = Integer.parseInt(tmp[2]);
-		c = Integer.parseInt(tmp[3]);
+		N = Integer.parseInt(st.nextToken());
+		d = Integer.parseInt(st.nextToken());
+		k = Integer.parseInt(st.nextToken());
+		c = Integer.parseInt(st.nextToken());
 		
-		arr = new int[n+k-1];
+		nums = new int[N];
 		
-		for (int i = 0; i < n; i++) {
-			arr[i] = Integer.parseInt(br.readLine());
-			
-			if (i < k) {
-				if (hashMap.get(arr[i]) == null) {
-					hashMap.put(arr[i], 1);
-				} else {
-					hashMap.put(arr[i], hashMap.get(arr[i])+1);
-				}
-			}
-		}
-		
-		for (int i = n; i < n+k-1; i++) {
-			arr[i] = arr[i-n];
+		for (int i = 0; i < N; i++) {
+			nums[i] = Integer.parseInt(br.readLine());
 		}
 		
 		int left = 0;
-		int maxSize = hashMap.size();
+		int right = 0;
+		int answer = 0;
 		
-		if (!hashMap.containsKey(c)) {
-			maxSize += 1;
-		} 
-
-		for (int right = k; right < n+k-1; right++) {
-			if (hashMap.get(arr[right]) == null) {
-				hashMap.put(arr[right], 1);
-			} else {
-				hashMap.put(arr[right], hashMap.get(arr[right])+1);
-			}
-			
-			if (hashMap.get(arr[left]) == 1) {
-				hashMap.remove(arr[left]);
-			} else {
-				hashMap.put(arr[left], hashMap.get(arr[left])-1);
-			}
-			
-			if (hashMap.containsKey(c)) {
-				maxSize = Math.max(maxSize, hashMap.size());
-			} else {
-				maxSize = Math.max(maxSize, hashMap.size()+1);
-			}
-			left++;
-		
+		hm.put(c, 1);
+		for (; right < k; right++) {
+			hm.put(nums[right], hm.getOrDefault(nums[right], 0) + 1);
 		}
 		
-		System.out.println(maxSize);
+		answer = hm.size();
+		
+		for (; left < N; left++, right++) {
+			int rIdx = right % N;
+			
+			hm.put(nums[rIdx], hm.getOrDefault(nums[rIdx], 0) + 1);
+			
+			if (hm.get(nums[left]) <= 1) {
+				hm.remove(nums[left]);
+			} else {
+				hm.put(nums[left], hm.get(nums[left]) - 1);
+			}
+			
+			answer = Math.max(answer, hm.size());
+		}
+		
+		System.out.println(answer);
 	}
-
 }
