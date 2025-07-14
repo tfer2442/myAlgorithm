@@ -1,43 +1,44 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
 
 public class Main {
 	public static int N;
-	public static int[] A;
-	
-	public static void main(String[] args) throws IOException{
+	public static int[] nums;
+
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));;
 		N = Integer.parseInt(br.readLine());
-		String[] tmp = br.readLine().split(" ");
-		A = new int[N];
 		
+		nums = new int[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
 		for (int i = 0; i < N; i++) {
-			A[i] = Integer.parseInt(tmp[i]);
+			nums[i] = Integer.parseInt(st.nextToken());
 		}
+		
+		Arrays.sort(nums);
 		
 		int left = 0;
-		int right = N-1;
-		int minValue = Integer.MAX_VALUE;
+		int right = N - 1;
+		int answer = Integer.MAX_VALUE;
 		
 		while (left < right) {
-			if (Math.abs(minValue) > Math.abs(A[left]+A[right])) {
-				minValue = A[left]+A[right];
-			}
+			int value = nums[left] + nums[right];
 			
-			if (A[left]+A[right] < 0) {
-				left++;
-			} else if (A[left]+A[right] > 0) {
-				right--;
-			} else if (A[left]+A[right] == 0) {
-				System.out.println(0);
-				System.exit(0);
-			}			
+			if (Math.abs(value) < Math.abs(answer)) {
+				answer = value;
+			} 
+			
+			if (value > 0) {
+				right -= 1;
+			} else if (value < 0) {
+				left += 1; 
+			} else if (value == 0) {
+				answer = 0;
+				break;
+			}
 		}
-		
-		System.out.println(minValue);
-
+		System.out.println(answer);
 	}
 }
