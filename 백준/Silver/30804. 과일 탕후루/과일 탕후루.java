@@ -1,49 +1,45 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	public static int n;
-	public static int[] arr;
-	public static int[] count = new int[10];
-	
-	public static void main(String[] args) throws IOException{
-		// TODO Auto-generated method stub
+	public static int N;
+	public static int[] fruits;
+	public static int[] count = new int[10]; // 1~9까지 사용, 인덱스 0은 사용 안함
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(br.readLine());
-		String[] tmp = br.readLine().split(" ");
-		arr = new int[n];
+		N = Integer.parseInt(br.readLine());
+		fruits = new int[N];
 		
-		for (int i = 0; i < n; i++) {
-			arr[i] = Integer.parseInt(tmp[i]);
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		for (int i = 0; i < N; i++) {
+			fruits[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		int total = 0;
 		int left = 0;
 		int answer = 0;
+		int types = 0; // 현재 과일 종류 수
 		
-		for (int right = 0; right < n; right++) {
-			
-			if (count[arr[right]] > 0) {
-				count[arr[right]]++;
-			} else {
-				count[arr[right]]++;
-				total++;
-				while (total > 2) {
-					if (count[arr[left]] == 1) {
-						count[arr[left]]--;
-						left++;
-						total--;
-					} else {
-						count[arr[left]]--;
-						left++;
-					}
-				}
-				
+		for (int right = 0; right < N; right++) {
+			// 새로운 과일 추가
+			if (count[fruits[right]] == 0) {
+				types++;
 			}
-			answer = Math.max(answer, right-left+1);
+			count[fruits[right]]++;
+			
+			// 과일 종류가 2개를 초과하면 left 포인터 이동
+			while (types > 2) {
+				count[fruits[left]]--;
+				if (count[fruits[left]] == 0) {
+					types--;
+				}
+				left++;
+			}
+			
+			answer = Math.max(answer, right - left + 1);
 		}
+		
 		System.out.println(answer);
 	}
-
 }
