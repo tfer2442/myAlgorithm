@@ -1,68 +1,86 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.util.*;
+import java.io.*;
+
+/*
+ * a,t,n,i,c 는 무조건 읽을 수 있어야 하므로 K에서 5는 미리 빼놓은 상태
+ * a~z 까지 담을 수 있는 배열을 만들고, 가르친 소문자의 위치에 1로 변환
+ * 조합 문제이다. 26개의 소문자 중에 K-5 조합을 구하면 된다.
+ * 입력을 받을 때, 앞의 anta와 뒤의 tica는 제외하고 String[] 배열에 받자.
+ * 만약 글자가 8글자라면 N을 하나 줄이고, answer += 1 하면 된다.
+ */
 
 public class Main {
-	public static int N, K;
-	public static String[] arr;
-	public static Character[] dict = {'b', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'o', 'p', 'q', 'r', 's', 'u', 'v', 'w', 'x', 'y', 'z'};   
-	public static HashSet<Character> hs = new HashSet<>();
-	public static int answer = 0;
+	public static int N, K, answer;
+	public static ArrayList<String> words;
+	public static int[] alphabet;
+	public static int maxValue;
 	
-	public static void combi(int cnt, int depth) {
-		if (cnt == K-5) {
-			int tmp = 0;
+	public static void combi(int depth, int idx) {
+		if (depth == K) {
+			int cnt = 0;
 			
-			for (int i = 0; i < N; i++) {
+			for (String word : words) {
 				boolean flag = false;
-
-				for (int j = 0; j < arr[i].length(); j++) {
-					if (!hs.contains(arr[i].charAt(j))) {
+				for (int i = 0; i < word.length(); i++) {
+					if (alphabet[word.charAt(i)-'a'] == 0) {
 						flag = true;
 						break;
 					}
 				}
+				
 				if (!flag) {
-					tmp++;
+					cnt++;
 				}
 			}
-			answer = Math.max(answer, tmp);
+			
+			maxValue = Math.max(maxValue, cnt);
 			return;
 		}
 		
-		for (int i = depth; i < 21; i++) {
-			hs.add(dict[i]);
-			combi(cnt+1, i+1);
-			hs.remove(dict[i]);
+		for (int i = idx; i < 26; i++) {
+			if (alphabet[i] == 1) continue;
+			
+			alphabet[i] = 1;
+			combi(depth+1, i+1);
+			alphabet[i] = 0;
 		}
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] tmp = br.readLine().split(" ");
-		N = Integer.parseInt(tmp[0]);
-		K = Integer.parseInt(tmp[1]);
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		arr = new String[N];
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		
+		words = new ArrayList<>();
 		
 		for (int i = 0; i < N; i++) {
-			arr[i] = br.readLine();
+			String tmp = br.readLine();
+			
+			if (tmp.length() == 8) {
+				answer++;
+				continue;
+			}
+			
+			words.add(tmp.substring(4, tmp.length()-4));
 		}
 		
 		if (K < 5) {
-			System.out.println("0");
+			System.out.println(0);
 			return;
 		}
 		
-		hs.add('a');
-		hs.add('n');
-		hs.add('t');
-		hs.add('i');
-		hs.add('c');
+		alphabet = new int[26];
+		alphabet['a'-'a'] = 1;
+		alphabet['n'-'a'] = 1;
+		alphabet['t'-'a'] = 1;
+		alphabet['i'-'a'] = 1;
+		alphabet['c'-'a'] = 1;
+		K -= 5;
+		
 		combi(0, 0);
-		System.out.println(answer);
+		System.out.println(answer + maxValue);
 	}
-
 }
