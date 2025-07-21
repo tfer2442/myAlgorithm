@@ -1,45 +1,44 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
+/*
+ * 수열의 길이: 1 <= N <= 100,000 
+ * O(NlogN) 이내로 문제를 해결
+ * 반복문을 돌면서, 자신의 이전 값과 비교해 같거나 크면 dp[i] = dp[i-1] + 1, 작다면 dp[i] = 1
+ * 감소하는 수열도 동일
+ * 증가와 감소를 하나의 반복문에서 처리할 수 있다.
+ */
 public class Main {
-	public static int N;
-	public static int[] arr;
-	public static int[] dp1;
-	public static int[] dp2;
+	public static int N, answer;
+	public static int[] nums, upDP, downDP;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		
+		nums = new int[N];
+		upDP = new int[N];
+		downDP = new int[N];
+		
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		arr = new int[N];
-		st = new StringTokenizer(br.readLine());
-		dp1 = new int[N];
-		dp2 = new int[N];
-		
 		for (int i = 0; i < N; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-			dp1[i] = 1;
-			dp2[i] = 1;
+			nums[i] = Integer.parseInt(st.nextToken());
+			upDP[i] = 1;
+			downDP[i] = 1;
 		}
 		
-		int answer = 1;
-		
+		answer = 1;
 		for (int i = 1; i < N; i++) {
-			if (arr[i] >= arr[i-1]) {
-				dp1[i] = dp1[i-1] + 1;
-				answer = Math.max(dp1[i], answer);
+			if (nums[i] >= nums[i-1]) {
+				upDP[i] = upDP[i-1]+1;
 			}
-		}
-		
-		for (int i = 1; i < N; i++) {
-			if (arr[i] <= arr[i-1]) {
-				dp2[i] = dp2[i-1] + 1;
-				answer = Math.max(dp2[i], answer);
+			
+			if (nums[i] <= nums[i-1]) {
+				downDP[i] = downDP[i-1]+1;
 			}
+			
+			answer = Math.max(answer, Math.max(upDP[i], downDP[i]));
 		}
 		
 		System.out.println(answer);
