@@ -1,37 +1,45 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
+
+/*
+ * 이항 계수를 구하는 문제
+ * 1. nCk == nCn-k
+ * 2. nCk == n-1Ck-1 + n-1Ck (n > 1, k > 1)
+ * 3. nC0 == 1
+ */
 
 public class Main {
 	public static int N, K;
+	public static int[][] dp;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] tmp = br.readLine().split(" ");
-		N = Integer.parseInt(tmp[0]);
-		K = Integer.parseInt(tmp[1]);
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		if (N-K < K) {
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+	
+		if (K > N-K) {
 			K = N-K;
 		}
 		
-		int[][] dp = new int[N+1][K+1];
-
-		for (int i = 0; i <= N; i++) {
+		dp = new int[N+1][K+1];
+		
+		dp[1][0] = 1;
+		
+		if (K != 0) {
+			dp[1][1] = 1;			
+		}
+		
+		for (int i = 2; i <= N; i++) {
 			dp[i][0] = 1;
-			if (i <= K) {
-				dp[i][i] = 1;
+			
+			for (int j = 1; j <= K; j++) {
+				dp[i][j] = (dp[i-1][j] + dp[i-1][j-1]) % 10007;
 			}
 		}
 		
-		
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= Math.min(K, i); j++) {
-				dp[i][j] = (dp[i-1][j-1] + dp[i-1][j]) % 10007;
-			}
-		}
 		System.out.println(dp[N][K]);
 	}
-
 }
