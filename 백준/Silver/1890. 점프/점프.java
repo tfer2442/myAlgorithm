@@ -25,21 +25,19 @@ public class Main {
 		}
 		
 		dp[0][0] = 1;
-		
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				if (i == N-1 && j == N-1) break;
-				if (dp[i][j] == 0) continue;
+				if (dp[i][j] == 0 || arr[i][j] == 0) continue;
+                
+                if (j + arr[i][j] < N) {
+					dp[i][j+arr[i][j]] += dp[i][j];
+				}
 				if (i + arr[i][j] < N) {
 					dp[i+arr[i][j]][j] += dp[i][j];
-				}
-				if (j + arr[i][j] < N) {
-					dp[i][j+arr[i][j]] += dp[i][j];
 				}
 			}
 		}
 		
 		System.out.println(dp[N-1][N-1]);
 	}
-
 }
