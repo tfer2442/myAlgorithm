@@ -1,67 +1,107 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
+/*
+ * 임의의 두 점을 고르고, 다른 정점에서 두 점 중 가까운 점까지의 거리의 총합
+ * 2 <= N <= 100 -> 임의의 두 점을 고른다면 O(100*99/2)
+ * 다익스트라를 활용하면? O(ElogV)
+ * -> O(V^2 * ElogV) 1 초안에 통과 가능
+ * 근데, 거리가 모두 1로 같으므로 BFS로 해도 되지 않을까? Depth가 곧 길이인데
+ * 그러면, 치킨 집을 기준으로 BFS를 돌리고, 배열을 업데이트 하는 식으로 하면 되겠다.
+ * 1. 조합을 작은 숫자부터 차례대로 구해야 함
+ */
 public class Main {
 	public static int N, M;
-	public static int[][] board;
-
+	public static ArrayList<Integer>[] graph;
+	public static int[] combinationNumbers, answerIdx;
+	public static int answer = Integer.MAX_VALUE;
+	
+	public static void bfs() {
+		int[] distance = new int[N+1];
+		
+		
+		for (int i = 1; i <= N; i++) {
+			distance[i] = Integer.MAX_VALUE;
+		}
+		
+		
+		for (int i = 0; i < 2; i++) {
+			ArrayDeque<int[]> dq = new ArrayDeque<>();
+			int start = combinationNumbers[i];
+			
+			distance[start] = 0;
+			dq.offer(new int[] {start, 0});
+			
+			while (!dq.isEmpty()) {
+				int[] node = dq.poll();
+				int cur = node[0];
+				int value = node[1];
+				
+				for (int next : graph[cur]) {
+					if (distance[next] == Integer.MAX_VALUE || distance[next] > value+1) {
+						distance[next] = value+1;
+						dq.offer(new int[] {next, value+1});
+						continue;
+					}
+				}
+			}
+		}
+		
+		int total = 0;
+		for (int i = 1; i <= N; i++) {
+			total += distance[i];
+		}
+		
+		total *= 2;
+		
+		if (total < answer) {
+			answer = total;
+			answerIdx[0] = combinationNumbers[0];
+			answerIdx[1] = combinationNumbers[1];
+		}
+	}
+	
+	public static void calculate(int depth, int idx) {
+		if (depth >= 2) {
+			bfs();
+			return;
+		}
+		
+		for (int i = idx; i <= N; i++) {
+			combinationNumbers[depth] = i;
+			calculate(depth+1, i+1);
+		}
+	}
+	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-		board = new int[N+1][N+1];
 		
-		for (int i = 0; i < N+1; i++) {
-			for (int j = 0; j < N+1; j++) {
-				if (i == j) {
-					board[i][j] = 0;
-					continue;
-				}
-				board[i][j] = Integer.MAX_VALUE;
-			}
+		graph = new ArrayList[N+1];
+		
+		for (int i = 1; i <= N; i++) {
+			graph[i] = new ArrayList<>();
 		}
 		
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int start = Integer.parseInt(st.nextToken());
-			int end = Integer.parseInt(st.nextToken());
-			board[start][end] = 1;
-			board[end][start] = 1;
+			
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			
+			graph[a].add(b);
+			graph[b].add(a);
 		}
 		
-		for (int k = 1; k <= N; k++) {
-			for (int i = 1; i <= N; i++) {
-				if (board[i][k] == Integer.MAX_VALUE) continue;
-				for (int j = 1; j <= N; j++) {
-					if (board[k][j] == Integer.MAX_VALUE) continue;
-					board[i][j] = Math.min(board[i][j], board[i][k] + board[k][j]);
-				}
-			}
-		}
+		combinationNumbers = new int[2];
+		answerIdx = new int[2];
 		
-		int answerNode1 = 1;
-		int answerNode2 = 2;
-		int answer = Integer.MAX_VALUE;
+		calculate(0, 1);
 		
-		for (int i = 1; i < N; i++) {
-			for (int j = i+1; j <= N; j++) {
-				int sum = 0;
-				for (int k = 1; k <= N; k++) {
-					if (k == i || k == j) continue;
-					sum += Math.min(board[i][k], board[j][k]);
-				}
-				if (answer > sum) {
-					answer = sum;
-					answerNode1 = i;
-					answerNode2 = j;
-				}
-			}
-		}
-		System.out.println(answerNode1 + " " + answerNode2 + " " + (answer*2));
+		System.out.println(answerIdx[0] + " " + answerIdx[1] + " " + answer);
 	}
-
 }
