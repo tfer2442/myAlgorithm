@@ -15,6 +15,25 @@ public class Main {
 	public static int[][] result;
 	public static int flag;
 	
+	// 입력 유효성 검사 - 조기 차단
+	public static boolean isValidInput() {
+		// 각 팀이 정확히 5경기를 했는지 확인
+		for (int i = 0; i < 6; i++) {
+			if (board[i][0] + board[i][1] + board[i][2] != 5) {
+				return false;
+			}
+		}
+		
+		// 전체 승수 = 전체 패수 여야 함
+		int totalWins = 0, totalLoses = 0;
+		for (int i = 0; i < 6; i++) {
+			totalWins += board[i][0];
+			totalLoses += board[i][2];
+		}
+		
+		return totalWins == totalLoses;
+	}
+	
 	public static void calculate(int cnt) {
 		if (flag == 1) {
 			return;
@@ -88,6 +107,12 @@ public class Main {
 				for (int k = 0; k < 3; k++) {
 					board[j][k] = Integer.parseInt(st.nextToken());
 				}
+			}
+			
+			// 조기 차단: 입력 유효성 검사
+			if (!isValidInput()) {
+				sb.append("0 ");
+				continue;
 			}
 			
 			result = new int[6][3];
