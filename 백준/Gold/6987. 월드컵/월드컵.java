@@ -2,6 +2,8 @@ import java.util.*;
 import java.io.*;
 
 /*
+ * 23분 25초
+ * 
  * 가능한 대진표인지 확인하는 문제
  * 총 국가는 6개
  * 모든 경우의 수를 확인 -> 6C2 = 15, 시간복잡도 3**15
@@ -17,6 +19,14 @@ public class Main {
 		if (flag == 1) {
 			return;
 		}
+		
+	    for (int i = 0; i < 6; i++) {
+	        for (int j = 0; j < 3; j++) {
+	            if (result[i][j] > board[i][j]) {
+	                return; // 이미 목표치를 초과했으면 불가능
+	            }
+	        }
+	    }
 		
 		if (cnt >= 15) {
 			for (int i = 0; i < 6; i++) {
