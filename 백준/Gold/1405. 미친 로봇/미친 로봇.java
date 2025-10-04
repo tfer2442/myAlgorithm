@@ -4,25 +4,26 @@ import java.io.*;
 public class Main {
 	public static int N;
 	public static int[] rate;
-	public static int[][] d = {{0, 1}, {0, -1}, {1, 0}, {-1 ,0}};
+	public static double answer;
 	public static boolean[][] visited;
-	public static double answer = 0;
+	public static int[][] d = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 	
-	public static void dfs(int depth, int r, int c, double curRate) {
-		if (depth >= N) {
-			answer += curRate;
+	public static void dfs(int r, int c, int depth, double value) {
+		if (N == depth) {
+			answer += value;
+			
 			return;
 		}
-				
+
 		for (int i = 0; i < 4; i++) {
-			if (rate[i] == 0) continue;
-			
 			int nextR = r + d[i][0];
 			int nextC = c + d[i][1];
 			
+			if (rate[i] == (double)0) continue;
 			if (visited[nextR][nextC]) continue;
+			
 			visited[nextR][nextC] = true;
-			dfs(depth+1, nextR, nextC, curRate * (rate[i]/100.0));
+			dfs(nextR, nextC, depth+1, value*rate[i]/100);
 			visited[nextR][nextC] = false;
 		}
 	}
@@ -34,14 +35,16 @@ public class Main {
 		
 		N = Integer.parseInt(st.nextToken());
 		rate = new int[4];
+		visited = new boolean[30][30];
 		
 		for (int i = 0; i < 4; i++) {
 			rate[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		visited = new boolean[2*N+1][2*N+1];
-		visited[N][N] = true;
-		dfs(0, N, N, 1);
+		visited[15][15] = true;
+		dfs(15, 15, 0, 1);
+		
 		System.out.println(answer);
 	}
+
 }
