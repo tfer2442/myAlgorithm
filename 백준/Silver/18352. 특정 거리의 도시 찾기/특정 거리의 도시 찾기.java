@@ -1,24 +1,34 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
+/*
+ * N: 도시의 개수, M: 도로의 개수, K: 거리 정보, X: 출발 도시 번호
+ * 최단 거리 K 도시가 하나도 없다면 -1 출력
+ * 모든 거리는 1
+ * 
+ *  BFS 문제
+ */
 public class Main {
 	public static int N, M, K, X;
-	public static ArrayList<int[]>[] graph;
+	public static int INF = 1_000_000_000;
+	public static ArrayList<Integer>[] graph;
 	public static int[] distance;
-	public static PriorityQueue<Node> pq;
+	public static ArrayList<Integer> answer = new ArrayList<>();
 	
-	public static class Node {
-		int value;
-		int v;
+	public static void bfs() {
+		ArrayDeque<Integer> dq = new ArrayDeque<>();
 		
-		public Node(int v, int value) {
-			// TODO Auto-generated constructor stub
-			this.value = value;
-			this.v = v;
+		dq.add(X);
+		
+		while (!dq.isEmpty()) {
+			int node = dq.poll();
+			
+			for (int next : graph[node]) {
+				if (distance[next] > distance[node] + 1) {
+					distance[next] = distance[node] + 1;
+					dq.add(next);
+				}
+			}
 		}
 	}
 	
@@ -27,13 +37,12 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		N = Integer.parseInt(st.nextToken()); // 도시 갯수
-		M = Integer.parseInt(st.nextToken()); // 도로 갯수
-		K = Integer.parseInt(st.nextToken()); // 거리 정보
-		X = Integer.parseInt(st.nextToken()); // 출발 도시
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		X = Integer.parseInt(st.nextToken());
+		
 		graph = new ArrayList[N+1];
-		distance = new int[N+1];
-		pq = new PriorityQueue<>((o1, o2) -> o1.value-o2.value);
 		
 		for (int i = 1; i <= N; i++) {
 			graph[i] = new ArrayList<>();
@@ -41,42 +50,36 @@ public class Main {
 		
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int s = Integer.parseInt(st.nextToken());
-			int e = Integer.parseInt(st.nextToken());
-			graph[s].add(new int[] {e, 1});
+			
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			
+			graph[a].add(b);
 		}
 		
-		for (int i = 0; i <= N; i++) {
-			distance[i] = Integer.MAX_VALUE;
-		}
-		
+		distance = new int[N+1];
+		Arrays.fill(distance, INF);
 		distance[X] = 0;
-		pq.add(new Node(X, 0));
+		bfs();
 		
-		while (!pq.isEmpty()) {
-			Node node = pq.poll();
-			
-			if (node.value > distance[node.v]) continue;
-			
-			for (int[] nextNode : graph[node.v]) {
-				if (distance[nextNode[0]] > distance[node.v] + nextNode[1]) {
-					distance[nextNode[0]] = distance[node.v] + nextNode[1];
-					pq.add(new Node(nextNode[0], distance[nextNode[0]]));
-				}
-			}
-		}
-		
-		boolean flag = false;
 		for (int i = 1; i <= N; i++) {
 			if (distance[i] == K) {
-				System.out.println(i);
-				flag = true;
+				answer.add(i);
 			}
 		}
 		
-		if (!flag) {
+		if (answer.size() == 0) {
 			System.out.println(-1);
+			return;
 		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for (int node : answer) {
+			sb.append(node).append("\n");
+		}
+		
+		System.out.println(sb);
 	}
 
 }
