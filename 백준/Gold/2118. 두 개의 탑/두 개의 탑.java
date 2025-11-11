@@ -20,7 +20,7 @@ public class Main {
 		int left = 0;
 		int right = 1;
 		int d = nums[0];
-		int answer = 0;
+		int answer = Math.min(d, total-d);
 		
 		while (left <= right && right < N) {
 			if (total - d > d) {
