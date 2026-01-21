@@ -1,18 +1,18 @@
-// skill: [type, r1, c1, r2, c2, degree]
-// type 1: 공격, type 2: 회복
+import java.util.*;
 
 class Solution {
-    int N, M, K;
-    int[][] board2;
+    int[][] skillSum;
+    int N, M;
     
     public int solution(int[][] board, int[][] skill) {
+        int answer = 0;
+        
         N = board.length;
         M = board[0].length;
-        K = skill.length;
         
-        board2 = new int[N+1][M+1];
+        skillSum = new int[N+1][M+1];
         
-        for (int i = 0; i < K; i++) {
+        for (int i = 0; i < skill.length; i++) {
             int type = skill[i][0];
             int r1 = skill[i][1];
             int c1 = skill[i][2];
@@ -21,40 +21,37 @@ class Solution {
             int degree = skill[i][5];
             
             if (type == 1) {
-                board2[r1][c1] += (-1) * degree;
-                board2[r1][c2+1] += degree;
-                board2[r2+1][c1] += degree;
-                board2[r2+1][c2+1] += (-1) * degree;
+                skillSum[r1][c1] += -degree;
+                skillSum[r2+1][c1] += degree;
+                skillSum[r1][c2+1] += degree;
+                skillSum[r2+1][c2+1] += -degree;
             } else if (type == 2) {
-                board2[r1][c1] += degree;
-                board2[r1][c2+1] += (-1) * degree;
-                board2[r2+1][c1] += (-1) * degree;
-                board2[r2+1][c2+1] += degree;
+                skillSum[r1][c1] += degree;
+                skillSum[r2+1][c1] += -degree;
+                skillSum[r1][c2+1] += -degree;
+                skillSum[r2+1][c2+1] += degree;
             }
         }
         
-        for (int i = 1; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                board2[i][j] += board2[i-1][j];    
+        for (int i = 0; i <= N; i++) {
+            for (int j = 1; j <= M; j++) {
+                skillSum[i][j] += skillSum[i][j-1];
             }
         }
         
-        for (int i = 1; i < M; i++) {
-            for (int j = 0; j < N; j++) {
-                board2[j][i] += board2[j][i-1];
+        for (int i = 0; i <= M; i++) {
+            for (int j = 1; j <= N; j++) {
+                skillSum[j][i] += skillSum[j-1][i];
             }
         }
-        
-        int answer = 0;
         
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (board2[i][j] + board[i][j] > 0) {
+                if (skillSum[i][j] + board[i][j] > 0) {
                     answer++;
                 }
             }
         }
-        
         
         return answer;
     }
