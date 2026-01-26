@@ -1,59 +1,42 @@
 import java.util.*;
 
 class Solution {
-    HashSet<Integer> hs = new HashSet<>();
-    int[][] dp;
-    static final int MOD = 1_000_000_007;
-
-    private int key(int r, int c, int m) {
-        return r * m + c;
-    }
-
     public int solution(int m, int n, int[][] puddles) {
-
+        int[][] board = new int[n][m];
+        int[][] dp = new int[n][m];
+        
         for (int i = 0; i < puddles.length; i++) {
-            int r = puddles[i][1] - 1;
-            int c = puddles[i][0] - 1;
-            hs.add(key(r, c, m));
+            int[] puddle = puddles[i];
+            int a = puddle[0]-1;
+            int b = puddle[1]-1;
+            
+            board[b][a] = -1;
         }
-
-        dp = new int[n][m];
-
-        boolean flag = false;
-
-        for (int i = 0; i < n; i++) {
-            if (hs.contains(key(i, 0, m))) {
-                flag = true;
-            }
-
-            if (flag) {
+        
+        dp[0][0] = 1;
+        for (int i = 1; i < n; i++) {
+            if (board[i][0] == -1) {
                 dp[i][0] = 0;
             } else {
-                dp[i][0] = 1;
+                dp[i][0] = dp[i-1][0];
             }
         }
-
-        flag = false;
-
-        for (int i = 0; i < m; i++) {
-            if (hs.contains(key(0, i, m))) {
-                flag = true;
-            }
-
-            if (flag) {
+        
+        for (int i = 1; i < m; i++) {
+            if (board[0][i] == -1) {
                 dp[0][i] = 0;
             } else {
-                dp[0][i] = 1;
+                dp[0][i] = dp[0][i-1];
             }
         }
-
+        
         for (int i = 1; i < n; i++) {
             for (int j = 1; j < m; j++) {
-                if (hs.contains(key(i, j, m))) continue;
-                dp[i][j] = (dp[i-1][j] + dp[i][j-1]) % MOD;
+                if (board[i][j] == -1) continue;
+                dp[i][j] = (dp[i-1][j] + dp[i][j-1]) % 1_000_000_007;
             }
         }
-
+        
         return dp[n-1][m-1];
     }
 }
