@@ -1,49 +1,42 @@
 import java.util.*;
 
 class Solution {
-    HashMap<Character, HashSet<Character>> hm;
-    
-    
-    boolean calculate(String s) {
-        for (int i = 0; i < s.length(); i++) {
-            if (!hm.containsKey(s.charAt(i))) continue;
-            
-            HashSet<Character> hs = hm.get(s.charAt(i));
+    public int solution(String skill, String[] skill_trees) {
+        int[] nums = new int[26];
+        Arrays.fill(nums, -1);
+        
+        for (int i = 0; i < skill.length(); i++) {
+            nums[skill.charAt(i) - 'A'] = i; 
+        }
+        
+        int answer = 0;
+        
+        for (int i = 0; i < skill_trees.length; i++) {
+            String target = skill_trees[i];
             int cnt = 0;
+            boolean flag = false;
             
-            for (int j = 0; j < i; j++) {
-                if (hs.contains(s.charAt(j))) {
+            for (int j = 0; j < target.length(); j++) {
+                char c = target.charAt(j);
+                int value = nums[c-'A'];
+                
+                if (value == -1) {
+                    continue;
+                } 
+                
+                if (value == cnt) {
                     cnt++;
+                } else {
+                    flag = true;
+                    break;
                 }
             }
             
-            if (cnt < hs.size()) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
-    
-    public int solution(String skill, String[] skill_trees) {
-        int answer = 0;
-        hm = new HashMap<>();
-        
-        for (int i = skill.length()-1; i > 0; i--) {
-            char a = skill.charAt(i);
-            hm.put(a, new HashSet<>());
-            HashSet hs = hm.get(a);
-            
-            for (int j = 0; j < i; j++) {
-                hs.add(skill.charAt(j));
-            }
-        }
-        
-        for (int i = 0; i < skill_trees.length; i++) {
-            if (calculate(skill_trees[i])) {
+            if (!flag) {
                 answer++;
             }
         }
+        
         
         return answer;
     }
