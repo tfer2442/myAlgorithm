@@ -9,10 +9,6 @@ class Solution {
     void dfs(int depth, int curK) {
         answer = Math.max(answer, depth);
         
-        if (depth > N) {
-            return;
-        }
-        
         for (int i = 0; i < N; i++) {
             if (visited[i]) continue;
             if (arr[i][0] > curK) continue;
@@ -29,12 +25,7 @@ class Solution {
 
         arr = dungeons;
         
-        for (int i = 0; i < N; i++) {
-            if (dungeons[i][0] > k) continue;
-            visited[i] = true;
-            dfs(1, k-dungeons[i][1]);
-            visited[i] = false;
-        }
+        dfs(0, k);
 
         return answer;
     }
