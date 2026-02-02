@@ -32,19 +32,14 @@ class Solution {
             }
         }
         
-        ArrayList<Integer> list1 = new ArrayList<>();
+        int[] answer = new int[K];
+        int num = 0;
         
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (board[i][j] == 0) break;
-                list1.add(board[i][j]);
+                answer[num++] = board[i][j];
             }
-        }
-        
-        int[] answer = new int[list1.size()];
-        
-        for (int i = 0; i < list1.size(); i++) {
-            answer[i] = list1.get(i);
         }
         
         return answer;
