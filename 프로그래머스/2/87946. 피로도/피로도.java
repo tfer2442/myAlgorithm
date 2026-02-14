@@ -4,17 +4,18 @@ class Solution {
     boolean[] visited;
     int N;
     int answer;
-    int[][] arr;
     
-    void dfs(int depth, int curK) {
-        answer = Math.max(answer, depth);
+    void dfs(int depth, int curK, int[][] dungeons) {
+        if (depth == N) {
+            return;
+        }
         
         for (int i = 0; i < N; i++) {
             if (visited[i]) continue;
-            if (arr[i][0] > curK) continue;
-            
+            if (dungeons[i][0] > curK) continue;
             visited[i] = true;
-            dfs(depth+1, curK-arr[i][1]);
+            answer = Math.max(answer, depth+1);
+            dfs(depth+1, curK-dungeons[i][1], dungeons);
             visited[i] = false;
         }
     }
@@ -22,11 +23,9 @@ class Solution {
     public int solution(int k, int[][] dungeons) {
         N = dungeons.length;
         visited = new boolean[N];
-
-        arr = dungeons;
         
-        dfs(0, k);
-
+        dfs(0, k, dungeons);
+        
         return answer;
     }
 }
