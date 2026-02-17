@@ -2,29 +2,42 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] topping) {
-        int answer = 0;
-        HashMap<Integer, Integer> hm1 = new HashMap<>();
-        HashMap<Integer, Integer> hm2 = new HashMap<>();
+        HashSet<Integer> hs = new HashSet<>();
         
         for (int i = 0; i < topping.length; i++) {
-            hm2.put(topping[i], hm2.getOrDefault(topping[i], 0) + 1);
+            hs.add(topping[i]);
         }
+        
+        int[] nums = new int[10_001];
+        int[] nums2 = new int[10_001];
+        int total1 = 0;
+        int total2 = hs.size();
+        
+        for (int i = 0; i < topping.length; i++) {
+            nums2[topping[i]]++;
+        }
+        
+        int answer = 0;
         
         for (int i = 0; i < topping.length; i++) {
             int cur = topping[i];
             
-            hm1.put(topping[i], hm1.getOrDefault(topping[i], 0) + 1);
-            if (hm2.get(topping[i]) == 1) {
-                hm2.remove(topping[i]);
-            } else {
-                hm2.put(topping[i], hm2.get(topping[i]) - 1);
+            if (nums2[cur] == 1) {
+                total2--;
             }
             
-            if (hm1.size() == hm2.size()) {
+            if (nums[cur] == 0) {
+                total1++;
+            }
+            
+            nums2[cur]--;
+            nums[cur]++;
+            
+            if (total1 == total2) {
                 answer++;
             }
         }
-            
+        
         return answer;
     }
 }
