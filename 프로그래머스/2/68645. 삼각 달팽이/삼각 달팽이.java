@@ -1,44 +1,36 @@
 import java.util.*;
 
 class Solution {
+    int[][] d = {{1, 0}, {0, 1}, {-1, -1}};
+    
     public int[] solution(int n) {
-        if (n == 1) {
-            return new int[] {1};
-        }
-        
-        int K = (n*n-n) / 2 + n;
+        int N = (n*n + n) / 2;
+        int[] answer = new int[N];
         int[][] board = new int[n][n];
-        
-        int[][] d = {{1, 0}, {0, 1}, {-1, -1}};
-        int r = -1;
-        int c = 0;
         int dir = 0;
+        int r = 0;
+        int c = 0;
         
-        for (int i = 1; i <= K; i++) {
-            int tmp = dir;
+        for (int i = 0; i < N; i++) {
+            
+            board[r][c] = i+1;
 
-            for (int j = tmp; j < tmp+3; j++) {
-                int nextR = r + d[j%3][0];
-                int nextC = c + d[j%3][1];
-                dir = j%3;
-                
-                if (nextR >= n || nextC >= n || nextR < 0 || nextC < 0) continue;
-                if (board[nextR][nextC] == 0) {
-                    board[nextR][nextC] = i;
-                    r = nextR;
-                    c = nextC;
-                    break;
-                }
+            if (r + d[dir][0] < 0 || r + d[dir][0] >= n || c + d[dir][1] < 0 || c + d[dir][1] >= n || board[r + d[dir][0]][c + d[dir][1]] != 0) {
+                dir = (dir + 1) % 3;
             }
+            
+            r += d[dir][0];
+            c += d[dir][1];
         }
         
-        int[] answer = new int[K];
-        int num = 0;
+        int idx = 0;
         
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (board[i][j] == 0) break;
-                answer[num++] = board[i][j];
+                if (board[i][j] != 0) {
+                    answer[idx] = board[i][j];
+                    idx++;
+                } 
             }
         }
         
