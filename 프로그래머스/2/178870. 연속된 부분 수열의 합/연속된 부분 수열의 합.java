@@ -2,39 +2,27 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] sequence, int k) {
-        int[] answer = {};
+        int[] answer = new int[2];
+        int minLen = 1_000_001;
         
         int left = 0;
         int sum = 0;
         
-        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2)->{
-            if (o1[1]-o1[0] == o2[1]-o2[0]) {
-                return Integer.compare(o1[0], o2[0]); 
-            }
-            
-            return Integer.compare(o1[1]-o1[0], o2[1]-o2[0]);
-        });
-        
         for (int right = 0; right < sequence.length; right++) {
             sum += sequence[right];
             
-            if (sum == k) {
-                pq.add(new int[]{left, right});
-            } else if (sum > k) {
-                while (left <= right) {
-                    sum -= sequence[left];
-                    left++;
-
-                    if (sum == k) {
-                        pq.add(new int[]{left, right});
-                        break;
-                    } else if (sum < k) {
-                        break;
-                    }
-                }
-            }            
+            while (sum > k && left <= right) {
+                sum -= sequence[left];
+                left++;
+            }
+            
+            if (minLen > right-left+1 && sum == k) {
+                minLen = right-left+1;
+                answer[0] = left;
+                answer[1] = right;
+            }
         }
         
-        return pq.poll();
+        return answer;
     }
 }
