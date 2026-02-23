@@ -2,23 +2,49 @@ import java.util.*;
 
 class Solution {
     public int solution(String[][] book_time) {
-        int[] time = new int[1451];
+        int[][] time = new int[book_time.length][2];
         
         for (int i = 0; i < book_time.length; i++) {
-            String[] start = book_time[i][0].split(":");
-            int s = Integer.parseInt(start[0]) * 60 + Integer.parseInt(start[1]);
-            String[] end = book_time[i][1].split(":");
-            int e = Integer.parseInt(end[0]) * 60 + Integer.parseInt(end[1]) + 9;
+            String[] s = book_time[i][0].split(":");
+            int m = Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
+            time[i][0] = m;
             
-            time[s] += 1;
-            time[e+1] += -1;
+            s = book_time[i][1].split(":");
+            m = Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]) + 10;
+            time[i][1] = m;
         }
+        
+        Arrays.sort(time, (o1, o2)-> {
+            if (o1[0] == o2[0]) {
+                return o1[1] - o2[1];
+            }
+            
+            return o1[0] - o2[0];
+        });
+        
+        System.out.println(Arrays.deepToString(time));
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2)->{
+            return o1-o2;
+        });
         
         int answer = 0;
         
-        for (int i = 1; i <= 1450; i++) {
-            time[i] += time[i-1];
-            answer = Math.max(answer, time[i]);
+        for (int i = 0; i < time.length; i++) {
+            int start = time[i][0];
+            
+            while (!pq.isEmpty()) {
+                int t = pq.peek();
+                
+                if (t <= start) {
+                    pq.poll();
+                } else {
+                    break;
+                }
+            }
+            
+            pq.add(time[i][1]);
+            answer = Math.max(answer, pq.size());
         }
         
         return answer;
