@@ -1,132 +1,89 @@
 import java.util.*;
 
 class Solution {
-    ArrayList<Integer> pre;
-    ArrayList<Integer> post;
+    ArrayList<Integer> preorderResult, postorderResult;
     
     static class Node {
-        int value;
-        int level;
-        int leftBound;
-        int rightBound;
-        Node left;
-        Node right;
-    }
-    
-    void preorder(Node node, int[][] nodeinfo, HashMap<String, Integer> hm) {
-        pre.add(hm.get(nodeinfo[node.value][0] + "," + nodeinfo[node.value][1])+1);
+        int x, y, idx;
+        Node left, right;
         
-        if (node.left != null) {
-            preorder(node.left, nodeinfo, hm);
-        }
-        
-        if (node.right != null) {
-            preorder(node.right, nodeinfo, hm);
+        Node(int x, int y, int idx) {
+            this.x = x;
+            this.y = y;
+            this.idx = idx;
         }
     }
     
-    void postorder(Node node, int[][] nodeinfo, HashMap<String, Integer> hm) {        
-        if (node.left != null) {
-            postorder(node.left, nodeinfo, hm);
-        }
+    void preorder(Node node) {
+        if (node == null) return;
+        preorderResult.add(node.idx);
+        preorder(node.left);
+        preorder(node.right);
+    }
+    
+    void postorder(Node node) {
+        if (node == null) return;
+        postorder(node.left);
+        postorder(node.right);
+        postorderResult.add(node.idx);
+    }
+    
+    void insert(Node root, Node child) {
+        Node cur = root;
         
-        if (node.right != null) {
-            postorder(node.right, nodeinfo, hm);
+        while (true) {
+            if (cur.x > child.x) {
+                if (cur.left == null) {
+                    cur.left = child;
+                    return;
+                }
+                cur = cur.left;
+            } else {
+                if (cur.right == null) {
+                    cur.right = child;
+                    return;
+                }
+                cur = cur.right;
+            }
         }
-        
-        post.add(hm.get(nodeinfo[node.value][0] + "," + nodeinfo[node.value][1])+1);
     }
     
     public int[][] solution(int[][] nodeinfo) {
-        int N = nodeinfo.length;
-        HashMap<String, Integer> hm = new HashMap<>();
         
-        for (int i = 0; i < N; i++) {
-            hm.put(nodeinfo[i][0] + "," + nodeinfo[i][1], i);
+        ArrayList<Node> tree = new ArrayList<>();
+        
+        for (int i = 0; i < nodeinfo.length; i++) {
+            Node node = new Node(nodeinfo[i][0], nodeinfo[i][1], i+1);
+            tree.add(node);
         }
         
-        Arrays.sort(nodeinfo, (o1, o2)-> {
-            if (o1[1] == o2[1]) {
-                return o1[0] - o2[0];
+        tree.sort((o1, o2) -> {
+            if (o2.y == o1.y) {
+                return o1.x - o2.x;
             }
-
-            return o2[1] - o1[1];
+            
+            return o2.y - o1.y; 
         });
         
-        HashMap<Integer, Integer> yLevel = new HashMap<>();
+        Node root = tree.get(0);
         
-        yLevel.put(nodeinfo[0][1], 1);
-        int prevY = nodeinfo[0][1];
-        int cntLevel = 2;
-        
-        for (int i = 1; i < N; i++) {
-            if (prevY == nodeinfo[i][1]) {
-                continue;
-            } else {
-                prevY = nodeinfo[i][1];
-                yLevel.put(prevY, cntLevel++);
-            }
+        for (int i = 1; i < tree.size(); i++) {
+            insert(root, tree.get(i));
         }
         
-        Node root = new Node(); // 이렇게 New로 만들어줘야하나?
-        root.value = 0; // nodeinfo에서의 idx인거지
-        root.level = 1;
-        root.leftBound = -1;
-        root.rightBound = 100_001;
+        preorderResult = new ArrayList<>();
+        postorderResult = new ArrayList<>();
         
-        ArrayDeque<Node> dq = new ArrayDeque<>();
-        dq.add(root);
+        preorder(root);
+        postorder(root);
         
-        boolean[] visited = new boolean[N];
-        visited[0] = true;
+        int[][] answer = new int[2][tree.size()];
         
-        while (!dq.isEmpty()) {
-            Node node = dq.poll();
-            
-            for (int i = node.value; i < N; i++) {
-                if (visited[i]) continue;
-                if (node.level+1 != yLevel.get(nodeinfo[i][1])) break;
-                if (node.leftBound < nodeinfo[i][0] && nodeinfo[node.value][0] > nodeinfo[i][0]) {
-                    Node left = new Node();
-                    
-                    left.value = i; 
-                    left.level = node.level+1;
-                    left.leftBound = node.leftBound;
-                    left.rightBound = nodeinfo[node.value][0];
-                    
-                    node.left = left;
-                    visited[i] = true;
-                    
-                    dq.add(left);
-                } else if (node.rightBound > nodeinfo[i][0] && nodeinfo[node.value][0] < nodeinfo[i][0]) {
-                    Node right = new Node();
-                    
-                    right.value = i;
-                    right.level = node.level+1;
-                    right.leftBound = nodeinfo[node.value][0];
-                    right.rightBound = node.rightBound;
-                    
-                    node.right = right;
-                    visited[i] = true;
-                    
-                    dq.add(right);
-                }
-            }
+        for (int i = 0; i < tree.size(); i++) {
+            answer[0][i] = preorderResult.get(i);
+            answer[1][i] = postorderResult.get(i);
         }
-        
-        pre = new ArrayList<>();
-        post = new ArrayList<>();
-        
-        preorder(root, nodeinfo, hm);
-        postorder(root, nodeinfo, hm);
 
-        int[][] answer = new int[2][N];
-                
-        for (int i = 0; i < N; i++) {
-            answer[0][i] = pre.get(i);
-            answer[1][i] = post.get(i);
-        }
-        
         return answer;
     }
 }
