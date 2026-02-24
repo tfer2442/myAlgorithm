@@ -57,8 +57,8 @@ class Solution {
             }
             
             int sum = 0;
+            hs.remove(0);
             for (int key : hs) {
-                if (key == 0) continue;
                 sum += hm.get(key);
             }
             
