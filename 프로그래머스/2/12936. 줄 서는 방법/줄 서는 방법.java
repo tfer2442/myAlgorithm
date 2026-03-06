@@ -1,35 +1,33 @@
 import java.util.*;
 
 class Solution {
-    long factorial(int n) {
-        long tmp = 1;
-        
-        for (int i = 1; i <= n; i++) {
-            tmp = tmp * i;
-        }
-        
-        return tmp;
-    }
-    
     public int[] solution(int n, long k) {
         int[] answer = new int[n];
-        LinkedList<Integer> chain = new LinkedList<>();
+        
+        ArrayList<Integer> arr = new ArrayList<>();
         
         for (int i = 1; i <= n; i++) {
-            chain.add(i);
+            arr.add(i);
         }
         
-        k -= 1;
-        int cnt = 0;
-        int N = n;
-                
-        while (cnt < N) {
-            long value = factorial(n)/n;
-            long idx = k/value;
-            answer[cnt++] = chain.get((int)idx);
-            chain.remove((int)idx);
-            n -= 1;
-            k = k%value;
+        long factorial = 1;
+        
+        for (int i = 1; i <= n; i++) {
+            factorial *= i;
+        }
+        
+        k = k-1;
+        int idx = 0;
+        
+        while (arr.size() > 0) {
+            factorial = factorial / n;
+            long a = k / factorial;
+            k = k % factorial;
+            
+            answer[idx++] = arr.get((int)a);
+            arr.remove((int)a);
+            
+            n -= 1;    
         }
         
         return answer;
