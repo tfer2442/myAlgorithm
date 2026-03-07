@@ -6,23 +6,19 @@ class Solution {
         ArrayDeque<Integer> dq = new ArrayDeque<>();
         
         for (int i = 0; i < prices.length; i++) {
-            // stack이 비어 있으면 put?
+            int curValue = prices[i];
             
-            while (!dq.isEmpty()) {
-                if (prices[dq.getLast()] > prices[i]) {
-                    answer[dq.getLast()] = i - dq.getLast();
-                    dq.pollLast();
-                } else {
-                    break;
-                }
+            while (!dq.isEmpty() && prices[dq.getLast()] > curValue) {
+                int idx = dq.pollLast();
+                answer[idx] = i - idx;
             }
             
-            dq.addLast(i);
+            dq.add(i);
         }
         
         while (!dq.isEmpty()) {
-            answer[dq.getLast()] = prices.length - dq.getLast() - 1;
-            dq.pollLast();
+            int idx = dq.pollLast();
+            answer[idx] = prices.length - idx - 1;
         }
         
         return answer;
