@@ -2,27 +2,29 @@ import java.util.*;
 
 class Solution {
     public String solution(int[] numbers) {
-        Integer[] nums = new Integer[numbers.length];
+        String[] arr = new String[numbers.length];
         
         for (int i = 0; i < numbers.length; i++) {
-            nums[i] = numbers[i];
+            arr[i] = String.valueOf(numbers[i]);
         }
         
-        Arrays.sort(nums, (o1, o2)->{
-            String a = String.valueOf(o1);
-            String b = String.valueOf(o2);
+        Arrays.sort(arr, (o1, o2) -> {
+            int a = Integer.parseInt(o1 + o2);
+            int b = Integer.parseInt(o2 + o1);
             
-            return Integer.parseInt(b+a) - Integer.parseInt(a+b);
+            return Integer.compare(b, a);
         });
         
-        if (nums[0] == 0) {
-            return "0";
-        }
+        if (Integer.parseInt(arr[0]) == 0) return "0";
         
         StringBuilder sb = new StringBuilder();
         
-        for (int i = 0; i < nums.length; i++) {
-            sb.append(nums[i]);
+        for (int i = 0; i < arr.length; i++) {
+            if (Integer.parseInt(arr[i]) == 0) {
+                sb.append("0");
+            } else {
+                sb.append(arr[i]);
+            }
         }
         
         return sb.toString();
