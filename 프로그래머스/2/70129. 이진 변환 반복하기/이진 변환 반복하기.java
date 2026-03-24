@@ -1,36 +1,40 @@
 import java.util.*;
 
 class Solution {
-    int cvt = 0;
-    int zero = 0;
     
-    int countOne(String s) {
-        int cnt = 0;
-        
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '1') {
-                cnt++;
-            } else {
-                zero++;
-            }
-        }
-        
-        return cnt;
-    }
+//     String calculate(int num) {
+//         Integer.binaryToString(num);
+//     }
     
     public int[] solution(String s) {
-        if (s.length() == 1 && Integer.parseInt(s) == 1) return new int[]{0, 0};
-        
-        int[] answer = {};
-                
-        while (true) {   
-            int cnt = countOne(s);
-            s = Integer.toBinaryString(cnt);
-            cvt++;
+        int[] answer = new int[2];
+        StringBuilder sb = new StringBuilder(s);
+        int zeroCnt = 0;
+        int changeNum = 0;
+ 
+        while (true) {
+            if (s.toString().equals("1")) {
+                break;
+            }
             
-            if (s.length() == 1 && Integer.parseInt(s) == 1) break;
+            int tmp =  0;
+            
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == '0') {
+                    zeroCnt++;
+                } else {
+                    tmp++;
+                }
+            }
+            
+            s = Integer.toBinaryString(tmp);
+            
+            changeNum++;
         }
         
-        return new int[]{cvt, zero};
+        answer[0] = changeNum;
+        answer[1] = zeroCnt;
+        
+        return answer;
     }
 }
