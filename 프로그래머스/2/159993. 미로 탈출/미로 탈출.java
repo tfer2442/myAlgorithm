@@ -1,29 +1,30 @@
 import java.util.*;
 
 class Solution {
-    int[][] d = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
+    int[][] d = {{-1 ,0}, {0, -1}, {0, 1}, {1, 0}};
+    int[] start, lever, exit;
+    char[][] board;
     
-    int bfs(int[] start, int[] end, String[] maps) {
-        boolean[][] visited = new boolean[maps.length][maps[0].length()];
+    int bfs(int[] s, int[] e) {
         ArrayDeque<int[]> dq = new ArrayDeque<>();
-
-        visited[start[0]][start[1]] = true;
-        dq.add(new int[]{start[0], start[1], 0});
+        boolean[][] visited = new boolean[board.length][board[0].length];
+        
+        dq.add(new int[]{s[0], s[1], 0});
         
         while (!dq.isEmpty()) {
             int[] node = dq.poll();
             
-            for (int i = 0; i < 4; i++) {
-                int nextR = node[0] + d[i][0];
-                int nextC = node[1] + d[i][1];
+            if (node[0] == e[0] && node[1] == e[1]) {
+                return node[2];
+            }
+            
+            for (int[] dd : d) {
+                int nextR = node[0] + dd[0];
+                int nextC = node[1] + dd[1];
                 
-                if (nextR < 0 || nextR >= maps.length || nextC < 0 || nextC >= maps[0].length()) continue;
-                
-                if (visited[nextR][nextC] || maps[nextR].charAt(nextC) == 'X') continue;
-                
-                if (nextR == end[0] && nextC == end[1]) {
-                    return node[2] + 1;
-                }
+                if (nextR < 0 || nextR >= board.length || nextC < 0 || nextC >= board[0].length) continue;
+                if (visited[nextR][nextC]) continue;
+                if (board[nextR][nextC] == 'X') continue;
                 
                 visited[nextR][nextC] = true;
                 dq.add(new int[]{nextR, nextC, node[2]+1});
@@ -34,39 +35,46 @@ class Solution {
     }
     
     public int solution(String[] maps) {
-        int[] start = new int[2];
-        int[] lever = new int[2];
-        int[] end = new int[2];
+        int answer = 0;
+        start = new int[2];
+        lever = new int[2];
+        exit = new int[2];
+        board = new char[maps.length][maps[0].length()];
         
         for (int i = 0; i < maps.length; i++) {
-            String line = maps[i];
-            
-            for (int j = 0; j < line.length(); j++) {
-                if (line.charAt(j) == 'S') {
+            for (int j = 0; j < maps[i].length(); j++) {
+                board[i][j] = maps[i].charAt(j);
+                
+                if (board[i][j] == 'S') {
                     start[0] = i;
                     start[1] = j;
-                } else if (line.charAt(j) == 'E') {
-                    end[0] = i;
-                    end[1] = j;
-                } else if (line.charAt(j) == 'L') {
+                } else if (board[i][j] == 'L') {
                     lever[0] = i;
                     lever[1] = j;
+                } else if (board[i][j] == 'E') {
+                    exit[0] = i;
+                    exit[1] = j;
                 }
             }
         }
         
-        int leverDistance = bfs(start, lever, maps);
         
-        if (leverDistance == -1) {
+        int tmp = bfs(start, lever);
+        
+        if (tmp == -1) {
             return -1;
         }
         
-        int endDistance = bfs(lever, end, maps);
+        answer += tmp;
         
-        if (endDistance == -1) {
+        tmp = bfs(lever, exit);
+        
+        if (tmp == -1) {
             return -1;
         }
-  
-        return leverDistance + endDistance;
+        
+        answer += tmp;
+        
+        return answer;
     }
 }
