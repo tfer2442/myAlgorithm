@@ -6,6 +6,10 @@ public class Main {
 	public static int answer = 1000;
 	
 	public static void dfs(int num, int one, int two, int three, int four, int five) {
+		int sum = (5-one) + (5-two) + (5-three) + (5-four) + (5-five);
+		
+		if (answer <= sum) return;
+				
 		if (num == 100) {
 			boolean flag = false;
 			
@@ -18,9 +22,7 @@ public class Main {
 				}
 			}
 			
-			int sum = (5-one) + (5-two) + (5-three) + (5-four) + (5-five);
-			
-			answer = Math.min(answer, sum);
+			answer = sum;
 					
 			return;
 		}
