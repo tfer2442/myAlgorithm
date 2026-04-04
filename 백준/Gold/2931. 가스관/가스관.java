@@ -1,62 +1,62 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static int R, C;
-    static char[][] board;
+    public static char[][] board;
+    public static int N, M;
+    public static int[][] d = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
-    // 상 우 하 좌
-    static int[] dr = {-1, 0, 1, 0};
-    static int[] dc = {0, 1, 0, -1};
+    public static boolean calculate(int r, int c, int k) {
+        if (board[r][c] == '|') {
+            if (k == 0 || k == 2) return true;
 
-    static boolean isPipe(char ch) {
-        return ch == '|' || ch == '-' || ch == '+' ||
-               ch == '1' || ch == '2' || ch == '3' || ch == '4';
-    }
+        } else if (board[r][c] == '-') {
+            if (k == 1 || k == 3) return true;
 
-    static boolean[] getDirs(char ch) {
-        boolean[] dirs = new boolean[4];
+        } else if (board[r][c] == '+') {
+            return true;
 
-        switch (ch) {
-            case '|':
-                dirs[0] = true;
-                dirs[2] = true;
-                break;
-            case '-':
-                dirs[1] = true;
-                dirs[3] = true;
-                break;
-            case '+':
-                dirs[0] = dirs[1] = dirs[2] = dirs[3] = true;
-                break;
-            case '1': // 우, 하
-                dirs[1] = true;
-                dirs[2] = true;
-                break;
-            case '2': // 상, 우
-                dirs[0] = true;
-                dirs[1] = true;
-                break;
-            case '3': // 상, 좌
-                dirs[0] = true;
-                dirs[3] = true;
-                break;
-            case '4': // 하, 좌
-                dirs[2] = true;
-                dirs[3] = true;
-                break;
+        } else if (board[r][c] == '1') {
+            if (k == 1 || k == 2) return true;
+
+        } else if (board[r][c] == '2') {
+            if (k == 0 || k == 1) return true;
+
+        } else if (board[r][c] == '3') {
+            if (k == 0 || k == 3) return true;
+
+        } else if (board[r][c] == '4') {
+            if (k == 2 || k == 3) return true;
         }
 
-        return dirs;
+        return false;
     }
 
-    static char decideTwoDir(boolean[] need) {
-        if (need[0] && need[2]) return '|';
-        if (need[1] && need[3]) return '-';
-        if (need[1] && need[2]) return '1';
-        if (need[0] && need[1]) return '2';
-        if (need[0] && need[3]) return '3';
-        if (need[2] && need[3]) return '4';
+    public static char decisionTwo(boolean[] opend) {
+        if (opend[0] && opend[2]) {
+            return '|';
+        }
+
+        if (opend[1] && opend[3]) {
+            return '-';
+        }
+
+        if (opend[1] && opend[2]) {
+            return '1';
+        }
+
+        if (opend[0] && opend[1]) {
+            return '2';
+        }
+
+        if (opend[0] && opend[3]) {
+            return '3';
+        }
+
+        if (opend[2] && opend[3]) {
+            return '4';
+        }
+
         return '?';
     }
 
@@ -64,89 +64,66 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        R = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        board = new char[R][C];
+        board = new char[N][M];
 
-        for (int i = 0; i < R; i++) {
+        for (int i = 0; i < N; i++) {
             String line = br.readLine();
-            for (int j = 0; j < C; j++) {
+
+            for (int j = 0; j < M; j++) {
                 board[i][j] = line.charAt(j);
             }
         }
 
-        for (int r = 0; r < R; r++) {
-            for (int c = 0; c < C; c++) {
-                if (board[r][c] != '.') continue;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (board[i][j] != '.') continue;
 
-                boolean[] need = new boolean[4];   // 주변 파이프 기준으로 실제 연결이 필요한 방향
-                boolean[] mz = new boolean[4];     // M/Z 인접 방향
-                int pipeCnt = 0;
-                int mzCnt = 0;
+                boolean[] opend = new boolean[4];
+                int cnt = 0;
 
-                for (int dir = 0; dir < 4; dir++) {
-                    int nr = r + dr[dir];
-                    int nc = c + dc[dir];
+                for (int k = 0; k < 4; k++) {
+                    int nextR = i + d[k][0];
+                    int nextC = j + d[k][1];
 
-                    if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+                    if (nextR < 0 || nextR >= N || nextC < 0 || nextC >= M) continue;
+                    if (board[nextR][nextC] == '.') continue;
 
-                    char next = board[nr][nc];
+                    if (board[nextR][nextC] == 'M' || board[nextR][nextC] == 'Z') {
+                        boolean flag = false;
 
-                    if (isPipe(next)) {
-                        boolean[] dirs = getDirs(next);
-                        int opposite = (dir + 2) % 4;
+                        for (int m = 0; m < 4; m++) {
+                            int nextRR = nextR + d[m][0];
+                            int nextCC = nextC + d[m][1];
 
-                        // 옆 파이프가 현재 빈칸 쪽으로 열려 있으면 연결 필요
-                        if (dirs[opposite]) {
-                            need[dir] = true;
-                            pipeCnt++;
-                        }
-                    } else if (next == 'M' || next == 'Z') {
-                        mz[dir] = true;
-                        mzCnt++;
-                    }
-                }
+                            if (nextRR < 0 || nextRR >= N || nextCC < 0 || nextCC >= M) continue;
+                            if (nextRR == i && nextCC == j) continue;
+                            if (board[nextRR][nextCC] == '.' || board[nextRR][nextCC] == 'M' || board[nextRR][nextCC] == 'Z') continue;
 
-                char answer = '?';
-
-                if (pipeCnt == 4) {
-                    answer = '+';
-                } else if (pipeCnt == 2) {
-                    answer = decideTwoDir(need);
-                } else if (pipeCnt == 1) {
-                    int first = -1;
-                    for (int i = 0; i < 4; i++) {
-                        if (need[i]) {
-                            first = i;
+                            flag = true;
                             break;
                         }
-                    }
 
-                    // M/Z가 붙어 있으면 그 방향과 first를 연결
-                    int second = -1;
-                    for (int i = 0; i < 4; i++) {
-                        if (mz[i]) {
-                            second = i;
-                            break;
+                        if (!flag) {
+                            cnt++;
+                            opend[k] = true;
                         }
-                    }
-
-                    boolean[] temp = new boolean[4];
-                    temp[first] = true;
-
-                    if (second != -1) {
-                        temp[second] = true;
-                        answer = decideTwoDir(temp);
                     } else {
-                        // 혹시 M/Z가 안 보이면 직선으로 보정
-                        if (first == 0 || first == 2) answer = '|';
-                        else answer = '-';
+                        int reverseDir = (k + 2) % 4;
+                        if (calculate(nextR, nextC, reverseDir)) {
+                            cnt++;
+                            opend[k] = true;
+                        }
                     }
                 }
 
-                if (answer != '?') {
-                    System.out.println((r + 1) + " " + (c + 1) + " " + answer);
+                if (cnt == 4) {
+                    System.out.println((i + 1) + " " + (j + 1) + " " + "+");
+                    return;
+                } else if (cnt == 2) {
+                    System.out.println((i + 1) + " " + (j + 1) + " " + decisionTwo(opend));
                     return;
                 }
             }
