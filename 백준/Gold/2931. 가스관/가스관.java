@@ -6,30 +6,23 @@ public class Main {
     public static int N, M;
     public static int[][] d = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
-    public static boolean calculate(int r, int c, int k) {
-        if (board[r][c] == '|') {
-            if (k == 0 || k == 2) return true;
-
-        } else if (board[r][c] == '-') {
-            if (k == 1 || k == 3) return true;
-
-        } else if (board[r][c] == '+') {
-            return true;
-
-        } else if (board[r][c] == '1') {
-            if (k == 1 || k == 2) return true;
-
-        } else if (board[r][c] == '2') {
-            if (k == 0 || k == 1) return true;
-
-        } else if (board[r][c] == '3') {
-            if (k == 0 || k == 3) return true;
-
-        } else if (board[r][c] == '4') {
-            if (k == 2 || k == 3) return true;
-        }
-
-        return false;
+    public static boolean calculate(int r, int c, int k) { 
+    	if (board[r][c] == '|') { 
+    		if (k == 0 || k == 2) return true; 
+    	} 
+    	else if (board[r][c] == '-') { 
+    		if (k == 1 || k == 3) return true; 
+    	} else if (board[r][c] == '+') { 
+    		return true; 
+    	} else if (board[r][c] == '1') { 
+    		if (k == 0 || k == 3) return true; 
+    	} else if (board[r][c] == '2') { 
+    		if (k == 2 || k == 3) return true; 
+    	} else if (board[r][c] == '3') { 
+    		if (k == 1 || k == 2) return true; 
+    	} else if (board[r][c] == '4') { 
+    		if (k == 0 || k == 1) return true; 
+    	} return false; 
     }
 
     public static char decisionTwo(boolean[] opend) {
@@ -111,8 +104,8 @@ public class Main {
                             opend[k] = true;
                         }
                     } else {
-                        int reverseDir = (k + 2) % 4;
-                        if (calculate(nextR, nextC, reverseDir)) {
+                        //int reverseDir = (k + 2) % 4;
+                        if (calculate(nextR, nextC, k)) {
                             cnt++;
                             opend[k] = true;
                         }
