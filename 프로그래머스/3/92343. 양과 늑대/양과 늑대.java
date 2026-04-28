@@ -1,54 +1,84 @@
 import java.util.*;
 
 class Solution {
-    int[] info;
-    List<Integer>[] tree;
-    int answer = 0;
+    int N, M, answer;
+    Node[] trees;
     
-    public void dfs(int wolf, int sheep, List<Integer> nextNodes) {
-        for (int i = 0; i < nextNodes.size(); i++) {
-            int current = nextNodes.get(i);
+    static class Node {
+        Node left;
+        Node right;
+        int idx;
+        int value;
+        
+        Node() {
+        }
+        
+        Node(Node left, Node right, int idx, int value) {
+            this.left = left;
+            this.right = right;
+            this.idx = idx;
+            this.value = value;
+        }
+    }
+    
+    public void dfs(int cur, int wolf, int sheep, ArrayList<Integer> curList) {
+        if (wolf >= sheep) {
+            return;
+        }
+        
+        answer = Math.max(answer, sheep);
+        
+        ArrayList<Integer> nextList = new ArrayList<>(curList);
+        
+        if (trees[cur].left != null) {
+            nextList.add(trees[cur].left.idx);
+        }
+        
+        if (trees[cur].right != null) {
+            nextList.add(trees[cur].right.idx);
+        }
+        
+        nextList.remove(Integer.valueOf(cur));
+        
+        for (int i = 0; i < nextList.size(); i++) {
+            int idx = nextList.get(i);
             
-            int nextSheep = sheep;
-            int nextWolf = wolf;
-            
-            if (info[current] == 0) nextSheep++;
-            else nextWolf++;
-            
-            if (nextWolf >= nextSheep) continue;
-            
-            answer = Math.max(answer, nextSheep);
-            
-            List<Integer> newNext = new ArrayList<>(nextNodes);
-            
-            newNext.remove(i);
-            newNext.addAll(tree[current]);
-            
-            dfs(nextWolf, nextSheep, newNext);
+            if (trees[idx].value == 1) {
+                dfs(idx, wolf+1, sheep, nextList);
+            } else {
+                dfs(idx, wolf, sheep+1, nextList);
+            }
         }
     }
     
     public int solution(int[] info, int[][] edges) {
-        this.info = info;
+        N = info.length;
+        M = edges.length;
         
-        tree = new ArrayList[info.length];
+        trees = new Node[N];
         
-        for (int i = 0; i < info.length; i++) {
-            tree[i] = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            trees[i] = new Node();
+            trees[i].value = info[i];
+            trees[i].idx = i;
         }
         
-        for (int i = 0; i < edges.length; i++) {
-            int a = edges[i][0];
-            int b = edges[i][1];
+        for (int i = 0; i < M; i++) {
+            int parent = edges[i][0];
+            int child = edges[i][1];
             
-            tree[a].add(b);
+            if (trees[parent].left == null) {
+                trees[parent].left = trees[child];
+            } else {
+                trees[parent].right = trees[child];
+            }
         }
         
-        List<Integer> nextNodes = new ArrayList<>();
-        nextNodes.add(0);
+        ArrayList<Integer> nextList = new ArrayList<>();
+        nextList.add(0);
         
-        dfs(0, 0, nextNodes);
-            
+        dfs(0, 0, 1, nextList);
+        
         return answer;
     }
 }
