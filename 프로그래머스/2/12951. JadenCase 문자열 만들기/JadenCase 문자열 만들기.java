@@ -2,36 +2,22 @@ import java.util.*;
 
 class Solution {
     public String solution(String s) {
-        String[] str = s.split(" ", -1);
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < str.length; i++) {
-            String curS = str[i].toLowerCase();
+        StringBuilder answer = new StringBuilder();
+        String[] arr = s.split(" ", -1);
+        
+        for (int i = 0; i < arr.length; i++) {
+            String tmp = arr[i];
             
-            if (curS.equals("")) {
-                if (i != str.length-1) {
-                    sb.append(" ");
-                }
-                continue;
+            if (tmp.length() > 0) {
+                answer.append(Character.toUpperCase(tmp.charAt(0)));
+                answer.append(tmp.toLowerCase().substring(1));
             }
             
-            char c = curS.charAt(0);
-            
-            if (c >= 'a' && c <= 'z') {
-                c = (char)(c + ('A' - 'a'));
-            }
-            
-            sb.append(c);
-            
-            if (curS.length() >= 2) {
-                sb.append(curS.substring(1));
-            }
-            
-            if (i != str.length-1) {
-                sb.append(" ");
+            if (i != arr.length-1) {
+                answer.append(" ");
             }
         }
         
-        return sb.toString();
+        return answer.toString();
     }
 }
