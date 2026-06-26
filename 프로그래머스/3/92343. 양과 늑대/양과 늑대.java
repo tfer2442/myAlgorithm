@@ -1,83 +1,79 @@
 import java.util.*;
 
 class Solution {
-    int N, M, answer;
-    Node[] trees;
+    int N;
+    Node[] graph;
+    int answer = 0;
     
     static class Node {
-        Node left;
-        Node right;
         int idx;
         int value;
+        Node left;
+        Node right;
         
-        Node() {
-        }
-        
-        Node(Node left, Node right, int idx, int value) {
-            this.left = left;
-            this.right = right;
+        Node(int idx, int value, Node left, Node right) {
             this.idx = idx;
             this.value = value;
+            this.left = left;
+            this.right = right;
         }
     }
     
-    public void dfs(int cur, int wolf, int sheep, ArrayList<Integer> curList) {
-        if (wolf >= sheep) {
+    public void dfs(int cur, int sheep, int wolf, ArrayList<Integer> next) {
+        answer = Math.max(answer, sheep);
+        
+        if (sheep <= wolf) {
             return;
         }
         
-        answer = Math.max(answer, sheep);
+        next.remove(Integer.valueOf(cur));
         
-        ArrayList<Integer> nextList = new ArrayList<>(curList);
-        
-        if (trees[cur].left != null) {
-            nextList.add(trees[cur].left.idx);
+        if (graph[cur].left != null) {
+            next.add(graph[cur].left.idx);
         }
         
-        if (trees[cur].right != null) {
-            nextList.add(trees[cur].right.idx);
+        if (graph[cur].right != null) {
+            next.add(graph[cur].right.idx);
         }
         
-        nextList.remove(Integer.valueOf(cur));
         
-        for (int i = 0; i < nextList.size(); i++) {
-            int idx = nextList.get(i);
+        for (int i = 0; i < next.size(); i++) {
+            int nextIdx = next.get(i);
+            ArrayList<Integer> tmp = new ArrayList<>(next);
             
-            if (trees[idx].value == 1) {
-                dfs(idx, wolf+1, sheep, nextList);
+            if (graph[nextIdx].value == 0) {
+                dfs(nextIdx, sheep+1, wolf, tmp);
             } else {
-                dfs(idx, wolf, sheep+1, nextList);
+                dfs(nextIdx, sheep, wolf+1, tmp);
             }
-        }
+            
+        }        
     }
     
     public int solution(int[] info, int[][] edges) {
         N = info.length;
-        M = edges.length;
         
-        trees = new Node[N];
+        graph = new Node[N];
         
         for (int i = 0; i < N; i++) {
-            trees[i] = new Node();
-            trees[i].value = info[i];
-            trees[i].idx = i;
+            graph[i] = new Node(i, info[i], null, null);
         }
         
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < edges.length; i++) {
             int parent = edges[i][0];
             int child = edges[i][1];
             
-            if (trees[parent].left == null) {
-                trees[parent].left = trees[child];
-            } else {
-                trees[parent].right = trees[child];
+            if (graph[parent].left == null) {                
+                graph[parent].left = graph[child];
+            } else if (graph[parent].right == null) {
+                graph[parent].right = graph[child];
             }
         }
         
-        ArrayList<Integer> nextList = new ArrayList<>();
-        nextList.add(0);
+        ArrayList<Integer> next = new ArrayList<>();
+        next.add(0);
         
-        dfs(0, 0, 1, nextList);
+        dfs(0, 1, 0, next);
         
         return answer;
     }
