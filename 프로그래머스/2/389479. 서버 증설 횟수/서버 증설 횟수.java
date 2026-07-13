@@ -3,24 +3,20 @@ import java.util.*;
 class Solution {
     public int solution(int[] players, int m, int k) {
         int answer = 0;
-        int server = 1;
+        int[] servers = new int[24];
         
-        // [0] : 유효 증설 시각, [1] : 증설한 서버 수
-        ArrayDeque<int[]> dq = new ArrayDeque<>();
+        // 현재 시간에 필요한 서버 수 : players[i] / m
         
-        for (int i = 0; i < players.length; i++) {
-            if (!dq.isEmpty() && dq.peek()[0] <= i) {
-                server -= dq.peek()[1];
-                dq.poll();
+        for (int i = 0; i < 24; i++) {
+            if (servers[i] <= players[i] / m) {
+                int add = players[i] / m - servers[i];
+                answer += add;
+                
+                for (int j = 0; j < k; j++) {
+                    if (i+j >= 24) break;
+                    servers[i+j] += add;
+                }
             }
-            
-            if (players[i] < server * m) continue;
-            
-            int num = players[i] - server*m;
-            server += num/m + 1;
-            
-            dq.add(new int[]{i+k, num/m+1});
-            answer += num/m+1;
         }
         
         return answer;
