@@ -1,74 +1,57 @@
 import java.util.*;
 
 class Solution {
-    int[] myMinerals;
     int answer = Integer.MAX_VALUE;
+    HashMap<String, Integer> hm;
     
-    void dfs(int idx, int sum, int dia, int iron, int stone) {
-        
-        if (sum >= answer) {
-            return;
-        }
-        
-        if (idx >= myMinerals.length || (dia == 0 && iron == 0 && stone == 0)) {
+    /* 곡괭이 선택하고, cur부터 cur+4까지 광물을 캠
+    곡괭이는 값이 있는 것 중 랜덤 선택.
+    모든 경우를 봐야하므로 곡괭이는 다시 돌려놔야 함
+    */
+    public void dfs(int[] picks, String[] minerals, int cur, int sum) {
+        if (sum >= answer) return;
+        if (picks[0] == 0 && picks[1] == 0 && picks[2] == 0) {
             answer = sum;
-            
             return;
-        } 
-        
-        int nextIdx = Math.min(myMinerals.length, idx+5);
-        
-        if (dia > 0) {
-            int total = 0;
-            for (int i = idx; i < nextIdx; i++) {
-                total++;
-            }
-            dfs(nextIdx, sum+total, dia-1, iron, stone);
+        }
+        if (minerals.length <= cur) {
+            answer = sum;
+            return;
         }
         
-        if (iron > 0) {
-            int total = 0;
-            for (int i = idx; i < nextIdx; i++) {
-                if (myMinerals[i] == 0) {
-                    total += 5;
-                } else {
-                    total += 1;
-                }
-            }
+        for (int i = 0; i < 3; i++) {
+            if (picks[i] == 0) continue;
+            picks[i]--;
+            int tmp = 0;
             
-            dfs(nextIdx, sum+total, dia, iron-1, stone);
-        }
-        
-        if (stone > 0) {
-            int total = 0;
-            for (int i = idx; i < nextIdx; i++) {
-                if (myMinerals[i] == 0) {
-                    total += 25;
-                } else if (myMinerals[i] == 1) {
-                    total += 5;
-                } else {
-                    total += 1;
+            for (int j = 0; j < 5; j++) {
+                if (cur + j >= minerals.length) break;
+                int next = cur+j;
+                int value = hm.get(minerals[next]);
+                
+                if (i <= value) {
+                    tmp += 1;
+                } else if (i == value+1) {
+                    tmp += 5;
+                } else if (i == value+2) {
+                    tmp += 25;
                 }
+                
             }
-            
-            dfs(nextIdx, sum+total, dia, iron, stone-1);
+            dfs(picks, minerals, cur+5, sum+tmp);
+            picks[i]++;
         }
     }
     
     public int solution(int[] picks, String[] minerals) {
-        myMinerals = new int[minerals.length];
+        hm = new HashMap<>();
         
-        for (int i = 0; i < minerals.length; i++) {
-            if (minerals[i].equals("diamond")) {
-                myMinerals[i] = 0;
-            } else if (minerals[i].equals("iron")) {
-                myMinerals[i] = 1;
-            } else {
-                myMinerals[i] = 2;
-            }
-        }
-        // 광물캐야하는 인덱스, 현재피로도, d곡괭이 수, i곡괭이 수, s곡괭이 수
-        dfs(0, 0, picks[0], picks[1], picks[2]);
+        hm.put("diamond", 0);
+        hm.put("iron", 1);
+        hm.put("stone", 2);
+        
+        dfs(picks, minerals, 0, 0);
+        
         return answer;
     }
 }
