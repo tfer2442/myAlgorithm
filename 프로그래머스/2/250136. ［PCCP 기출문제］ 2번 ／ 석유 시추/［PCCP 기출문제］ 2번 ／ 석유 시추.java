@@ -4,65 +4,73 @@ class Solution {
     int N, M;
     int[][] board;
     int[][] land;
-    boolean[][] visited;
     HashMap<Integer, Integer> hm;
-    int cnt, cur;
     int[][] d = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
     
-    void dfs(int r, int c) {
+    void bfs(int sr, int sc, int cnt) {
+        int size = 1;
         
-        for (int i = 0; i < 4; i++) {
-            int nextR = r + d[i][0];
-            int nextC = c + d[i][1];
+        ArrayDeque<int[]> dq = new ArrayDeque<>();
+        dq.add(new int[]{sr, sc});
+        board[sr][sc] = cnt;
+        
+        while (!dq.isEmpty()) {
+            int[] node = dq.poll();
             
-            if (0 > nextR || nextR >= N || nextC < 0 || nextC >= M) continue;
-            if (visited[nextR][nextC] || land[nextR][nextC] == 0) continue;
-            
-            cnt++;
-            board[nextR][nextC] = cur;
-            visited[nextR][nextC] = true;
-            dfs(nextR, nextC);
+            for (int[] dd : d) {
+                int nextR = node[0] + dd[0];
+                int nextC = node[1] + dd[1];
+                
+                if (nextR < 0 || nextR >= N || nextC < 0 || nextC >= M) continue;
+                if (land[nextR][nextC] == 0) continue;
+                if (board[nextR][nextC] != 0) continue;
+                
+                board[nextR][nextC] = cnt;
+                dq.add(new int[]{nextR, nextC});
+                size++;
+            }
         }
+        
+        hm.put(cnt, size);
     }
-
+    
     public int solution(int[][] land) {
         N = land.length;
         M = land[0].length;
         
         board = new int[N][M];
-        visited = new boolean[N][M];
-        hm = new HashMap<>();
         this.land = land;
         
-        cur = 1;
+        int cnt = 1;
+        hm = new HashMap<>();
         
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (visited[i][j] || land[i][j] == 0) continue;
-                visited[i][j] = true;
-                cnt = 1;
-                board[i][j] = cur;
-                dfs(i, j);
-                hm.put(cur++, cnt);
+                if (land[i][j] == 1 && board[i][j] == 0) {
+                    bfs(i, j, cnt);
+                    cnt++;
+
+                }
             }
         }
         
         int answer = 0;
+        HashSet<Integer> hs;
         
-        for (int i = 0; i < M; i++) {
-            HashSet<Integer> hs = new HashSet<>();
+        for (int j = 0; j < M; j++) {
+            hs = new HashSet<>();
+            int curSize = 0;
             
-            for (int j = 0; j < N; j++) {
-                hs.add(board[j][i]);
+            for (int i = 0; i < N; i++) {
+                if (board[i][j] == 0) continue;
+                hs.add(board[i][j]);
             }
             
-            int sum = 0;
-            hs.remove(0);
-            for (int key : hs) {
-                sum += hm.get(key);
+            for (int tmp : hs) {
+                curSize += hm.get(tmp);
             }
             
-            answer = Math.max(answer, sum);
+            answer = Math.max(answer, curSize);
         }
         
         return answer;
